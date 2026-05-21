@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Brick Breaker Odyssey - Neon Edition</title>
+    <!-- Icono .ICO enlazado en la pestaña del navegador -->
+    <link rel="icon" type="image/x-icon" href="icono.ico">
     <style>
         /* --- ESTILOS VISUALES GENERALES (TEMA NEÓN RETRO) --- */
         body {
@@ -19,7 +21,7 @@
             font-family: 'Courier New', Courier, monospace;
             overflow: hidden;
             user-select: none;
-            touch-action: none; /* Previene el zoom y scroll por defecto en móviles */
+            touch-action: none;
         }
 
         /* Clase utilitaria para alternar pantallas */
@@ -27,7 +29,71 @@
             display: none !important;
         }
 
-        /* Contenedor principal de pantallas de interfaz */
+        /* --- SPLASH SCREENS (INTRODUCCIÓN Y ESPERA) --- */
+        .pantalla-completa {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            background-color: #000;
+            text-align: center;
+        }
+
+        .video-presentacion {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .simulacion-video {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle, #1a102f 0%, #050508 100%);
+            animation: introGlow 2s infinite alternate;
+        }
+
+        @keyframes introGlow {
+            from { text-shadow: 0 0 10px #00f0ff; }
+            to { text-shadow: 0 0 30px #ff0077; }
+        }
+
+        .imagen-espera {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #09090e 0%, #151522 100%);
+            border: 4px solid #ff0077;
+            box-shadow: inset 0 0 40px rgba(255, 0, 119, 0.4);
+            box-sizing: border-box;
+        }
+
+        .neon-destello {
+            font-size: 24px;
+            color: #00f0ff;
+            text-shadow: 0 0 10px #00f0ff;
+            animation: pulsado 1.5s infinite alternate;
+            margin-top: 20px;
+        }
+
+        @keyframes pulsado {
+            from { opacity: 0.2; }
+            to { opacity: 1; }
+        }
+
+        /* --- CONTENEDOR DE PANTALLAS --- */
         .pantalla {
             background-color: rgba(13, 13, 19, 0.98);
             border: 3px solid #00f0ff;
@@ -172,7 +238,7 @@
             background-color: #050508;
             box-shadow: 0px 0px 20px #00f0ff, inset 0px 0px 20px #00f0ff;
             border-radius: 8px;
-            max-width: 95%; /* Asegura adaptabilidad en celulares */
+            max-width: 95%;
             height: auto;
         }
 
@@ -238,15 +304,16 @@
             box-shadow: 0 0 6px #ffcc00;
         }
 
-        /* --- TIENDA --- */
+        /* --- TIENDA UNIFICADA --- */
         .grid-tienda {
             display: grid;
             grid-template-columns: 1fr;
             gap: 10px;
             width: 95%;
-            max-height: 220px;
+            max-height: 180px;
             overflow-y: auto;
             margin-bottom: 15px;
+            padding-right: 5px;
         }
 
         @media (min-width: 480px) {
@@ -267,10 +334,38 @@
         }
 
         .item-tienda button {
-            width: 100px;
+            width: 105px;
             padding: 6px;
             font-size: 11px;
             margin: 0;
+        }
+
+        /* --- PANEL DE USUARIO Y LOGIN --- */
+        .panel-usuario {
+            width: 90%;
+            background: #141419;
+            border: 1px solid #333;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .input-arcade {
+            background: #050508;
+            border: 2px solid #00f0ff;
+            color: white;
+            padding: 8px;
+            font-family: inherit;
+            border-radius: 4px;
+            outline: none;
+            text-align: center;
+        }
+
+        .input-arcade:focus {
+            box-shadow: 0 0 8px #00f0ff;
         }
 
         /* --- CONFIGURACIÓN --- */
@@ -347,18 +442,51 @@
 <body>
 
     <!-- ========================================== -->
+    <!-- SECUENCIA 1: VIDEO DE PRESENTACIÓN (5 SEG) -->
+    <!-- ========================================== -->
+    <div id="splashVideo" class="pantalla-completa">
+        <!-- El elemento de video reproduce una presentación abstracta. Si no carga, se activa la simulación decorativa inferior -->
+        <video class="video-presentacion" autoplay muted playsinline id="introVideo" onerror="cambiarASimulacionVideo()">
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-retro-futuristic-grid-background-43093-large.mp4" type="video/mp4">
+            Tu navegador no soporta video.
+        </video>
+        <div id="simulacionIntro" class="simulacion-video oculto">
+            <h1 style="font-size: 40px; color: #ff0077;">NEON GAMES</h1>
+            <p style="color: #00f0ff; letter-spacing: 4px;">PRESENTA</p>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SECUENCIA 2: IMAGEN DE ESPERA (5 SEG) -->
+    <!-- ========================================== -->
+    <div id="splashEspera" class="pantalla-completa oculto">
+        <div class="imagen-espera">
+            <h1 style="font-size: 36px; color: #39ff14; text-shadow: 0 0 15px #39ff14;">BRICK BREAKER ODYSSEY</h1>
+            <p style="color: #888;">PREPARANDO EL MOTOR ARCADE...</p>
+            <div class="neon-destello">ESPERE UN MOMENTO</div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
     <!-- PANTALLA 1: MENÚ PRINCIPAL -->
     <!-- ========================================== -->
-    <div id="menuPrincipal" class="pantalla">
+    <div id="menuPrincipal" class="pantalla oculto">
         <h1>Brick Breaker Odyssey</h1>
+        
+        <!-- Panel de Identificación / Guardado en la nube -->
+        <div class="panel-usuario">
+            <span id="txtUserEstado" style="font-size:12px; color: #00f0ff;">Guardado Local Activo</span>
+            <input type="text" id="inputMail" class="input-arcade" placeholder="INGRESA TU MAIL" value="">
+            <button class="btn-neon" style="font-size: 11px; padding: 6px; width: 100%; border-color: #ff0077; box-shadow: none;" onclick="conectarUsuarioCloud()">Guardar / Cargar Partida</button>
+        </div>
+
         <div class="info-monedas">
             <span>Puntos: <span id="mPuntos">0</span></span>
             <span style="color: #ffcc00;">Coins: <span id="mCoins">0</span></span>
         </div>
         <button class="btn-neon btn-verde" style="font-size: 18px;" onclick="jugarNivelActualDirecto()">¡JUGAR!</button>
         <button class="btn-neon" onclick="abrirNiveles()">Seleccionar Nivel</button>
-        <button class="btn-neon btn-naranja" id="mBtnCanjear" onclick="canjearPuntosMenu()">Canjear 100 P por 1 C</button>
-        <button class="btn-neon" style="border-color:#aaa; box-shadow: 0 0 8px #aaa;" onclick="abrirTienda()">Tienda de Skins</button>
+        <button class="btn-neon" style="border-color:#ffcc00; box-shadow: 0 0 8px #ffcc00;" onclick="abrirTienda()">Tienda</button>
         <button class="btn-neon btn-morado" onclick="abrirConfig()">Configuración</button>
         <div class="instrucciones">Controles: Flechas o teclas A/D en PC, arrastra el dedo en móvil</div>
     </div>
@@ -373,16 +501,27 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- PANTALLA 3: TIENDA DE SKINS -->
+    <!-- PANTALLA 3: TIENDA UNIFICADA -->
     <!-- ========================================== -->
     <div id="menuTienda" class="pantalla oculto">
-        <h1>Tienda de Diseños</h1>
-        <div class="info-monedas"><span style="color: #ffcc00;">Tus Coins: <span id="tCoins">0</span></span></div>
+        <h1>Tienda</h1>
+        <div class="info-monedas">
+            <span style="color: #ffcc00;">Coins: <span id="tCoins">0</span></span>
+            <span>Puntos: <span id="tPuntos">0</span></span>
+        </div>
+        
+        <!-- Canjear Puntos dentro de la Tienda -->
+        <button class="btn-neon btn-naranja" id="tBtnCanjear" style="width: 95%; margin-bottom: 15px;" onclick="canjearPuntosMenu()">Canjear 100 P por 1 Coin</button>
+
         <div class="grid-tienda">
             <div class="item-tienda"><span>🟢 Base Verde</span><button id="btn-skinBase-verde" class="btn-neon" onclick="comprarOEquiparMenu('skinBase', 'verde', 2)">2 C</button></div>
             <div class="item-tienda"><span>🔴 Bola Roja</span><button id="btn-skinPelota-roja" class="btn-neon" onclick="comprarOEquiparMenu('skinPelota', 'roja', 4)">4 C</button></div>
             <div class="item-tienda"><span>✨ Estela Neon</span><button id="btn-efecto-estela" class="btn-neon" onclick="comprarOEquiparMenu('efecto', 'estela', 6)">6 C</button></div>
             <div class="item-tienda"><span>🔵 Base Azul Pro</span><button id="btn-skinBase-azulpro" class="btn-neon" onclick="comprarOEquiparMenu('skinBase', 'azulpro', 3)">3 C</button></div>
+            <!-- Nuevos ítems de la tienda -->
+            <div class="item-tienda"><span>🔥 Efecto Fuego</span><button id="btn-efecto-fuego" class="btn-neon" onclick="comprarOEquiparMenu('efecto', 'fuego', 6)">6 C</button></div>
+            <div class="item-tienda"><span>⚾ Bola Béisbol</span><button id="btn-skinPelota-baseball" class="btn-neon" onclick="comprarOEquiparMenu('skinPelota', 'baseball', 3)">3 C</button></div>
+            <div class="item-tienda"><span>🏏 Palo Béisbol</span><button id="btn-skinBase-baseball" class="btn-neon" onclick="comprarOEquiparMenu('skinBase', 'baseball', 3)">3 C</button></div>
         </div>
         <button class="btn-neon btn-rojo btn-juego-chico" onclick="volverAlMenu()">Volver</button>
     </div>
@@ -435,7 +574,7 @@
                 <h1 style="color: #39ff14; text-shadow: 0 0 10px #39ff14; font-size: 24px;">¡Nivel Completado!</h1>
                 <h2 id="txtSubVictoria" style="color: #ffcc00; text-shadow: 0 0 8px #ffcc00; font-size: 15px;">Avanzando en tu Odyssey...</h2>
                 <button class="btn-neon btn-verde btn-juego-chico" id="btnSiguienteNivel" onclick="cargarSiguienteNivel()">Siguiente</button>
-                <button class="btn-neon btn-naranja btn-juego-chico" onclick="irAMercadoDesdeVictoria()">Mercado</button>
+                <button class="btn-neon btn-naranja btn-juego-chico" onclick="irAMercadoDesdeVictoria()">Tienda</button>
                 <button class="btn-neon btn-juego-chico" onclick="volverAlMenuDesdeVictoria()">Menú</button>
             </div>
 
@@ -529,13 +668,111 @@
             }
         }
 
-        // --- DATOS DE PERSISTENCIA ---
+        // --- SISTEMA DE CONTROL DE SECUENCIA DE SPLASHES (10 SEG TOTAL) ---
+        window.addEventListener("DOMContentLoaded", () => {
+            // Intenta reproducir el video
+            const video = document.getElementById("introVideo");
+            if (video) {
+                video.play().catch(() => {
+                    cambiarASimulacionVideo();
+                });
+            }
+
+            // A los 5 segundos pasa de Video a Imagen de Espera
+            setTimeout(() => {
+                document.getElementById("splashVideo").classList.add("oculto");
+                document.getElementById("splashEspera").classList.remove("oculto");
+                
+                // A los otros 5 segundos (10 en total) pasa al Menú Principal
+                setTimeout(() => {
+                    document.getElementById("splashEspera").classList.add("oculto");
+                    document.getElementById("menuPrincipal").classList.remove("oculto");
+                    iniciarAudio();
+                }, 5000);
+
+            }, 5000);
+        });
+
+        function cambiarASimulacionVideo() {
+            document.getElementById("introVideo").classList.add("oculto");
+            document.getElementById("simulacionIntro").classList.remove("oculto");
+        }
+
+        // --- DATOS DE PERSISTENCIA (LOCAL Y SIMULACIÓN CLOUD FIRESTORE) ---
         let puntos = parseInt(localStorage.getItem("puntos")) || 0;
         let recordMaximo = parseInt(localStorage.getItem("recordMaximo")) || 0;
         let coins = parseInt(localStorage.getItem("coins")) || 0;
         let nivelMaximoDesbloqueado = parseInt(localStorage.getItem("nivelMaxDesbloqueado")) || 1;
         let inventario = JSON.parse(localStorage.getItem("inventario")) || { skinBase: ["default"], skinPelota: ["default"], efecto: ["none"] };
         let equipado = JSON.parse(localStorage.getItem("equipado")) || { skinBase: "default", skinPelota: "default", efecto: "none" };
+        let usuarioEmail = localStorage.getItem("usuarioEmail") || "";
+
+        // Inicializar input si hay email guardado
+        if (usuarioEmail) {
+            document.getElementById("inputMail").value = usuarioEmail;
+            document.getElementById("txtUserEstado").innerText = "Usuario: " + usuarioEmail;
+            document.getElementById("txtUserEstado").style.color = "#39ff14";
+        }
+
+        // Simulación robusta de guardado de datos en la nube vinculada al email
+        function conectarUsuarioCloud() {
+            const email = document.getElementById("inputMail").value.trim();
+            if (!email || !email.includes("@")) {
+                alert("Por favor ingresa un correo electrónico válido para resguardar tus datos.");
+                return;
+            }
+            sfxClick();
+            
+            // Simular carga de base de datos en la nube (Firestore mock)
+            const claveLlamada = "cloud_" + email;
+            const datosExistentes = localStorage.getItem(claveLlamada);
+            
+            if (datosExistentes) {
+                // Si ya existía el mail, carga su progreso
+                const datos = JSON.parse(datosExistentes);
+                puntos = datos.puntos;
+                recordMaximo = datos.recordMaximo;
+                coins = datos.coins;
+                nivelMaximoDesbloqueado = datos.nivelMaximoDesbloqueado;
+                inventario = datos.inventario;
+                equipado = datos.equipado;
+                
+                alert("¡Partida recuperada con éxito de la nube!");
+            } else {
+                // Si es nuevo, crea el registro con el progreso actual
+                const datosAAgregar = {
+                    puntos: puntos,
+                    recordMaximo: recordMaximo,
+                    coins: coins,
+                    nivelMaximoDesbloqueado: nivelMaximoDesbloqueado,
+                    inventario: inventario,
+                    equipado: equipado
+                };
+                localStorage.setItem(claveLlamada, JSON.stringify(datosAAgregar));
+                alert("¡Se ha creado un nuevo perfil de juego para este correo!");
+            }
+            
+            usuarioEmail = email;
+            localStorage.setItem("usuarioEmail", email);
+            document.getElementById("txtUserEstado").innerText = "Sincronizado: " + email;
+            document.getElementById("txtUserEstado").style.color = "#39ff14";
+            
+            actualizarUI();
+        }
+
+        function sincronizarProgresoACloud() {
+            if (usuarioEmail) {
+                const datosAAgregar = {
+                    puntos: puntos,
+                    recordMaximo: recordMaximo,
+                    coins: coins,
+                    nivelMaximoDesbloqueado: nivelMaximoDesbloqueado,
+                    inventario: inventario,
+                    equipado: equipado
+                };
+                localStorage.setItem("cloud_" + usuarioEmail, JSON.stringify(datosAAgregar));
+            }
+        }
 
         // --- VARIABLES DE ESTADO Y FLUX ---
         let enPartida = false;
@@ -563,18 +800,6 @@
         let estrellaTiempoRestante = 0;
         let colorEstrellaFlisFlas = 0;
 
-        // Tipos de poderes
-        const TIPOS_PODER = [
-            { tipo: "ALARGAR", color: "#2ecc71", letra: "W", bueno: true },
-            { tipo: "ACHICAR", color: "#e74c3c", letra: "S", bueno: false },
-            { tipo: "MULTIPLICAR", color: "#f1c40f", letra: "X3", bueno: true },
-            { tipo: "PALETA_RAPIDA", color: "#3498db", letra: "V+", bueno: true },
-            { tipo: "PALETA_LENTA", color: "#9b59b6", letra: "V-", bueno: false },
-            { tipo: "PELOTA_RAPIDA", color: "#e67e22", letra: "B+", bueno: false },
-            { tipo: "PELOTA_LENTA", color: "#1abc9c", letra: "B-", bueno: true },
-            { tipo: "ESTRELLA", color: "rainbow", letra: "★", bueno: true }
-        ];
-
         let ladrillos = [];
         let columnasLadrillos, filasLadrillos;
         let anchoLadrillo = 48;
@@ -597,31 +822,26 @@
             if (e.key === "Left" || e.key === "ArrowLeft" || e.key === "a" || e.key === "A") flechaIzquierda = false;
         });
 
-        // --- CONTROLE TÁCTIL EXCLUSIVO (MÓVIL) ---
+        // --- CONTROL TÁCTIL EXCLUSIVO (MÓVIL) ---
         function manejarToqueTáctil(e) {
             if (!enPartida || juegoPausado) return;
             
-            // Obtener el toque (soporta arrastre táctil continuo)
             let touch = e.touches[0];
             let rect = canvas.getBoundingClientRect();
             
-            // Calcular escala de render por si el canvas está achicado en pantallas móviles
             let escalaX = canvas.width / rect.width;
             let touchX = (touch.clientX - rect.left) * escalaX;
             
-            // Si la pelota no fue lanzada, el toque la lanza directamente
             if (!pelotaLanzada) {
                 lanzarPelota();
             }
 
-            // Ubicar la paleta centrada sobre el eje de nuestro dedo
             paletaX = touchX - anchoPaleta / 2;
             
-            // Límites para evitar que la paleta salga de los bordes del canvas
             if (paletaX < 0) paletaX = 0;
             if (paletaX > canvas.width - anchoPaleta) paletaX = canvas.width - anchoPaleta;
             
-            e.preventDefault(); // Detiene el scroll incómodo del móvil mientras jugás
+            e.preventDefault();
         }
 
         canvas.addEventListener("touchstart", manejarToqueTáctil, { passive: false });
@@ -688,11 +908,9 @@
             juegoPausado = false;
             detenerMusica();
             
-            // Ocultar overlays arcade
             document.getElementById("modalVictoria").classList.add("oculto");
             document.getElementById("modalDerrota").classList.add("oculto");
             
-            // Reestablecer botón de pausa visualmente
             pauseBtn.innerText = "PAUSA";
             pauseBtn.style.borderColor = NEON_PINK;
             pauseBtn.style.boxShadow = `0 0 10px ${NEON_PINK}`;
@@ -700,7 +918,7 @@
             pauseBtn.classList.remove("activo-pausa");
 
             document.getElementById("contenedorJuego").classList.add("oculto");
-            document.getElementById("juegoCanvas").classList.add("oculto"); // Asegurar que se oculta
+            document.getElementById("juegoCanvas").classList.add("oculto");
             document.getElementById("menuPrincipal").classList.remove("oculto");
             actualizarUI();
         }
@@ -712,6 +930,7 @@
             localStorage.setItem("nivelMaxDesbloqueado", nivelMaximoDesbloqueado);
             localStorage.setItem("inventario", JSON.stringify(inventario));
             localStorage.setItem("equipado", JSON.stringify(equipado));
+            sincronizarProgresoACloud();
         }
 
         function actualizarUI() {
@@ -730,10 +949,28 @@
             let mP = document.getElementById("mPuntos"); if(mP) mP.innerText = puntos;
             let mC = document.getElementById("mCoins");  if(mC) mC.innerText = coins;
             let tC = document.getElementById("tCoins");  if(tC) tC.innerText = coins;
+            let tP = document.getElementById("tPuntos");  if(tP) tP.innerText = puntos;
             let mBtn = document.getElementById("mBtnCanjear"); if(mBtn) mBtn.disabled = puntos < 100;
+            let tBtn = document.getElementById("tBtnCanjear"); if(tBtn) tBtn.disabled = puntos < 100;
+
+            // Actualizar tienda con los nuevos ítems incorporados
+            actualizarBotonTienda("skinBase", "verde", 2);
+            actualizarBotonTienda("skinBase", "azulpro", 3);
+            actualizarBotonTienda("skinPelota", "roja", 4);
+            actualizarBotonTienda("efecto", "estela", 6);
+            actualizarBotonTienda("efecto", "fuego", 6);
+            actualizarBotonTienda("skinPelota", "baseball", 3);
+            actualizarBotonTienda("skinBase", "baseball", 3);
         }
 
-        // --- GENERADOR DE NIVELES CON PATRONES VARIABLES ---
+        function actualizarBotonTienda(tipo, id, precio) {
+            const btn = document.getElementById(`btn-${tipo}-${id}`);
+            if (!btn) return;
+            if (equipado[tipo] === id) { btn.innerText = "Equipado"; btn.disabled = true; btn.style.background = "#2ecc71"; }
+            else if (inventario[tipo].includes(id)) { btn.innerText = "Equipar"; btn.disabled = false; btn.style.background = "#0095DD"; }
+            else { btn.innerText = `${precio} C`; btn.disabled = coins < precio; btn.style.background = "#27ae60"; }
+        }
+
         function generarNivel(numNivel) {
             esNivelBonus = (numNivel % 10 === 0);
             
@@ -773,7 +1010,6 @@
             generarNivel(nivelActual);
             resetearPosiciones();
             
-            // Cerrar overlays arcade viejos
             document.getElementById("modalVictoria").classList.add("oculto");
             document.getElementById("modalDerrota").classList.add("oculto");
             
@@ -781,7 +1017,7 @@
             document.getElementById("hudBonus").style.display = esNivelBonus ? "inline" : "none";
             
             document.getElementById("contenedorJuego").classList.remove("oculto");
-            document.getElementById("juegoCanvas").classList.remove("oculto"); // Mostrar el canvas recién acá
+            document.getElementById("juegoCanvas").classList.remove("oculto");
             
             actualizarVidasUI();
             actualizarUI();
@@ -794,9 +1030,18 @@
         // --- SISTEMA DE SELECCIÓN Y CONFIGURACIÓN DE PANTALLAS ---
         function abrirNiveles() { hookClicksConSonido(() => { construirSelectorNiveles(); document.getElementById("menuPrincipal").classList.add("oculto"); document.getElementById("menuNiveles").classList.remove("oculto"); }); }
         function volverAlMenu() { hookClicksConSonido(() => { document.getElementById("menuNiveles").classList.add("oculto"); document.getElementById("menuTienda").classList.add("oculto"); document.getElementById("menuConfig").classList.add("oculto"); document.getElementById("menuPrincipal").classList.remove("oculto"); actualizarUI(); }); }
-        function abrirTienda() { hookClicksConSonido(() => { document.getElementById("menuPrincipal").classList.add("oculto"); document.getElementById("menuTienda").classList.remove("oculto"); }); }
+        function abrirTienda() { hookClicksConSonido(() => { document.getElementById("menuPrincipal").classList.add("oculto"); document.getElementById("menuTienda").classList.remove("oculto"); actualizarUI(); }); }
         function abrirConfig() { hookClicksConSonido(() => { sincronizarUIConfig(); document.getElementById("menuPrincipal").classList.add("oculto"); document.getElementById("menuConfig").classList.remove("oculto"); }); }
-        function canjearPuntosMenu() { hookClicksConSonido(() => { if (puntos >= 100) { puntos -= 100; coins += 1; actualizarUI(); } }); }
+        
+        function canjearPuntosMenu() { 
+            hookClicksConSonido(() => { 
+                if (puntos >= 100) { 
+                    puntos -= 100; 
+                    coins += 1; 
+                    actualizarUI(); 
+                } 
+            }); 
+        }
         
         function jugarNivelActualDirecto() {
             hookClicksConSonido(() => {
@@ -831,48 +1076,7 @@
             }
         }
 
-        function sincronizarUIConfig() {
-            document.getElementById("cfgAudio").checked = cfgSonidoHabilitado;
-            document.getElementById("cfgVolumen").value = cfgVolumenNivel;
-            document.getElementById("cfgVibracion").checked = cfgVibracionHabilitada;
-        }
-
-        function actualizarConfigValores() {
-            cfgSonidoHabilitado = document.getElementById("cfgAudio").checked;
-            cfgVolumenNivel = parseFloat(document.getElementById("cfgVolumen").value);
-            cfgVibracionHabilitada = document.getElementById("cfgVibracion").checked;
-
-            localStorage.setItem("cfgSonido", cfgSonidoHabilitado);
-            localStorage.setItem("cfgVolumenValue", cfgVolumenNivel);
-            localStorage.setItem("cfgVibracion", cfgVibracionHabilitada);
-
-            if (audioCtx && masterGainNode) {
-                masterGainNode.gain.setValueAtTime(cfgSonidoHabilitado ? (cfgVolumenNivel * 2.0) : 0, audioCtx.currentTime);
-            }
-            if (cfgSonidoHabilitado && !sec_intervalo && enPartida) reproducirMusicaDeFondo();
-            if (!cfgSonidoHabilitado) detenerMusica();
-        }
-
-        function solicitarReiniciarProgreso() {
-            if (confirm("¿Estás seguro de que querés borrar todos tus puntos, monedas y niveles desbloqueados?")) {
-                localStorage.clear();
-                puntos = 0;
-                recordMaximo = 0;
-                coins = 0;
-                nivelMaximoDesbloqueado = 1;
-                inventario = { skinBase: ["default"], skinPelota: ["default"], efecto: ["none"] };
-                equipado = { skinBase: "default", skinPelota: "default", efecto: "none" };
-                cfgSonidoHabilitado = true;
-                cfgVolumenNivel = 0.5;
-                cfgVibracionHabilitada = true;
-                sincronizarUIConfig();
-                actualizarConfigValores();
-                actualizarUI();
-                alert("Progreso reseteado. El Nivel 1 está listo.");
-            }
-        }
-
-        // --- REPRODUCTOR DE MÚSICA CON CONTROL DE VELOCIDAD AUTO-REGULADO ---
+        // --- AUDIO CONTROLLER CON VELOCIDAD AUTO-REGULADA ---
         function reproducirMusicaDeFondo() {
             detenerMusica();
             if (!enPartida || !cfgSonidoHabilitado) return;
@@ -930,7 +1134,6 @@
             activarVibracion(40);
 
             switch(item.tipo) {
-                case "ALARRGAR": // Fallback ortográfico
                 case "ALARGAR":        anchoPaleta = anchoPaletaBase * 1.4; break;
                 case "ACHICAR":        anchoPaleta = anchoPaletaBase * 0.65; break;
                 case "PALETA_RAPIDA":  velocidadPaleta = velocidadPaletaBase * 1.5; break;
@@ -1012,14 +1215,14 @@
         function irAMercadoDesdeVictoria() {
             document.getElementById("modalVictoria").classList.add("oculto");
             document.getElementById("contenedorJuego").classList.add("oculto");
-            document.getElementById("juegoCanvas").classList.add("oculto"); // Ocultar al ir al mercado
+            document.getElementById("juegoCanvas").classList.add("oculto");
             abrirTienda();
         }
 
         function volverAlMenuDesdeVictoria() {
             document.getElementById("modalVictoria").classList.add("oculto");
             document.getElementById("contenedorJuego").classList.add("oculto");
-            document.getElementById("juegoCanvas").classList.add("oculto"); // Ocultar al ir al menú
+            document.getElementById("juegoCanvas").classList.add("oculto");
             document.getElementById("menuPrincipal").classList.remove("oculto");
             actualizarUI();
         }
@@ -1032,7 +1235,7 @@
         function volverAlMenuDesdeDerrota() {
             document.getElementById("modalDerrota").classList.add("oculto");
             document.getElementById("contenedorJuego").classList.add("oculto");
-            document.getElementById("juegoCanvas").classList.add("oculto"); // Ocultar al ir al menú
+            document.getElementById("juegoCanvas").classList.add("oculto");
             document.getElementById("menuPrincipal").classList.remove("oculto");
             actualizarUI();
         }
@@ -1058,23 +1261,70 @@
         }
 
         function dibujarPelotasYEstelas(p) {
-            if (equipado.efecto === "estela" && pelotaLanzada && !juegoPausado) {
+            // Estela especial de Fuego o Estela de Neón normal
+            let usarFuego = (equipado.efecto === "fuego");
+            let usarEstela = (equipado.efecto === "estela") || usarFuego;
+
+            if (usarEstela && pelotaLanzada && !juegoPausado) {
                 p.estelaHistorial.push({ x: p.x, y: p.y });
-                if (p.estelaHistorial.length > 8) p.estelaHistorial.shift();
+                if (p.estelaHistorial.length > 10) p.estelaHistorial.shift();
                 for (let i = 0; i < p.estelaHistorial.length; i++) {
                     ctx.beginPath();
                     ctx.arc(p.estelaHistorial[i].x, p.estelaHistorial[i].y, radioPelota * (i / p.estelaHistorial.length), 0, Math.PI * 2);
-                    ctx.fillStyle = estrellaMarioActiva ? `hsla(${colorEstrellaFlisFlas + (i * 25)}, 100%, 50%, 0.25)` : `rgba(0, 240, 255, ${i / p.estelaHistorial.length * 0.2})`;
+                    
+                    if (estrellaMarioActiva) {
+                        ctx.fillStyle = `hsla(${colorEstrellaFlisFlas + (i * 25)}, 100%, 50%, 0.25)`;
+                    } else if (usarFuego) {
+                        // Sutil rampa de color fuego cálido: de amarillo a rojo intenso
+                        ctx.fillStyle = `rgba(255, ${Math.floor(i * 18)}, 0, ${i / p.estelaHistorial.length * 0.4})`;
+                    } else {
+                        ctx.fillStyle = `rgba(0, 240, 255, ${i / p.estelaHistorial.length * 0.2})`;
+                    }
+                    
                     ctx.fill();
                     ctx.closePath();
                 }
             } else { p.estelaHistorial = []; }
 
             let colorPelota = NEON_GREEN;
-            if (estrellaMarioActiva) colorPelota = `hsl(${colorEstrellaFlisFlas}, 100%, 60%)`;
-            else if (equipado.skinPelota === "roja") colorPelota = "#ff3333";
+            if (estrellaMarioActiva) {
+                colorPelota = `hsl(${colorEstrellaFlisFlas}, 100%, 60%)`;
+            } else if (equipado.skinPelota === "roja") {
+                colorPelota = "#ff3333";
+            } else if (equipado.skinPelota === "baseball") {
+                // Aspecto pelota de béisbol (Blanco con costuras rojas implícitas)
+                colorPelota = "#ffffff";
+            }
 
             drawNeonCircle(p.x, p.y, radioPelota, colorPelota, estrellaMarioActiva ? 22 : 12);
+            
+            // Dibujar detalles de costuras si es diseño de béisbol
+            if (equipado.skinPelota === "baseball") {
+                ctx.strokeStyle = "#ff0077";
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, radioPelota - 2, 0.5, Math.PI - 0.5);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, radioPelota - 2, Math.PI + 0.5, -0.5);
+                ctx.stroke();
+            }
+        }
+
+        function dibujarPaleta() {
+            let colorPal = "#ffffff";
+            if (estrellaMarioActiva) {
+                colorPal = `hsl(${(colorEstrellaFlisFlas + 180) % 360}, 100%, 50%)`;
+            } else if (equipado.skinBase === "verde") {
+                colorPal = NEON_GREEN;
+            } else if (equipado.skinBase === "azulpro") {
+                colorPal = NEON_CYAN;
+            } else if (equipado.skinBase === "baseball") {
+                // Color marrón madera clásico del bate de béisbol
+                colorPal = "#d2b48c";
+            }
+            
+            drawNeonRect(paletaX, canvas.height - altoPaleta - 25, anchoPaleta, altoPaleta, colorPal, 15);
         }
 
         function dibujarLadrillosNeon() {
@@ -1106,14 +1356,12 @@
                 let colCapsula = pod.info.color === "rainbow" ? `hsl(${colorEstrellaFlisFlas}, 100%, 50%)` : pod.info.color;
                 drawNeonCircle(pod.x, pod.y, 11, colCapsula, 10);
 
-                // Letra
                 ctx.fillStyle = "#ffffff";
                 ctx.font = "bold 11px 'Courier New', monospace";
                 ctx.textAlign = "center";
                 ctx.textBaseline = "middle";
                 ctx.fillText(pod.info.letra, pod.x, pod.y);
 
-                // Colisión con paleta
                 let yPaleta = canvas.height - altoPaleta - 25;
                 if (pod.y + 11 >= yPaleta && pod.y - 11 <= yPaleta + altoPaleta && pod.x >= paletaX && pod.x <= paletaX + anchoPaleta) {
                     aplicarPoder(pod.info);
@@ -1132,7 +1380,6 @@
             }
 
             if (juegoPausado) {
-                // Cartel de pausa Neón
                 ctx.fillStyle = "rgba(13, 13, 19, 0.4)";
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
                 ctx.fillStyle = NEON_PINK;
@@ -1153,18 +1400,16 @@
                 if (estrellaTiempoRestante <= 0) estrellaMarioActiva = false;
             }
 
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // --- ESCALA DE GRISES DINÁMICA DE FONDO POR NIVEL ---
+            // Oscila sutilmente entre negro profundo y gris oscuro para no saturar la vista
+            let tonalidadGris = Math.floor((nivelActual % 10) * 2.5); // Sutil factor de variación
+            ctx.fillStyle = `rgb(${tonalidadGris}, ${tonalidadGris}, ${tonalidadGris + 3})`;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
             
             dibujarLadrillosNeon();
             gestionarYDibujarPoderes();
             detectarColisionesJuego();
-
-            // Dibujar Paleta
-            let colorPal = "#ffffff";
-            if (estrellaMarioActiva) colorPal = `hsl(${(colorEstrellaFlisFlas + 180) % 360}, 100%, 50%)`;
-            else if (equipado.skinBase === "verde") colorPal = NEON_GREEN;
-            else if (equipado.skinBase === "azulpro") colorPal = NEON_CYAN;
-            drawNeonRect(paletaX, canvas.height - altoPaleta - 25, anchoPaleta, altoPaleta, colorPal, 15);
+            dibujarPaleta();
 
             // Mover y rebotar pelotas
             for (let i = pelotas.length - 1; i >= 0; i--) {
@@ -1210,13 +1455,12 @@
                     sfxGameOver();
                     activarVibracion(250);
                     
-                    // Mostrar overlay de derrota tipo arcade
                     document.getElementById("txtNivelDerrota").innerText = `Nivel ${nivelActual} fallido`;
                     document.getElementById("modalDerrota").classList.remove("oculto");
                 }
             }
 
-            // Movimiento paleta (por teclado en PC)
+            // Movimiento paleta
             if (flechaDerecha && paletaX < canvas.width - anchoPaleta) paletaX += velocidadPaleta;
             else if (flechaIzquierda && paletaX > 0) paletaX -= velocidadPaleta;
 
