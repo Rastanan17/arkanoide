@@ -2,1474 +2,1136 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Brick Breaker Odyssey - Neon Edition</title>
-    <!-- Icono .ICO enlazado en la pestaña del navegador -->
-    <link rel="icon" type="image/x-icon" href="icono.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retro Brick Breaker - Configuración y Audio Avanzado</title>
     <style>
-        /* --- ESTILOS VISUALES GENERALES (TEMA NEÓN RETRO) --- */
         body {
-            margin: 0;
-            padding: 0;
-            background-color: #0d0d13;
+            background-color: #0f0f14;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             min-height: 100vh;
-            color: white;
-            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
             overflow: hidden;
             user-select: none;
-            touch-action: none;
         }
-
-        /* Clase utilitaria para alternar pantallas */
-        .oculto {
-            display: none !important;
+        .contenedor-principal {
+            position: relative;
+            width: 640px;
+            height: 400px;
         }
-
-        /* --- SPLASH SCREENS (INTRODUCCIÓN Y ESPERA) --- */
-        .pantalla-completa {
-            position: fixed;
+        canvas {
+            background: #141419;
+            border: 4px solid #fff;
+            box-shadow: 0 0 30px rgba(0, 230, 255, 0.2);
+            display: block;
+        }
+        .pantalla {
+            position: absolute;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 999;
-            background-color: #000;
-            text-align: center;
-        }
-
-        .video-presentacion {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .simulacion-video {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: radial-gradient(circle, #1a102f 0%, #050508 100%);
-            animation: introGlow 2s infinite alternate;
-        }
-
-        @keyframes introGlow {
-            from { text-shadow: 0 0 10px #00f0ff; }
-            to { text-shadow: 0 0 30px #ff0077; }
-        }
-
-        .imagen-espera {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(135deg, #09090e 0%, #151522 100%);
-            border: 4px solid #ff0077;
-            box-shadow: inset 0 0 40px rgba(255, 0, 119, 0.4);
+            width: 640px;
+            height: 400px;
             box-sizing: border-box;
-        }
-
-        .neon-destello {
-            font-size: 24px;
-            color: #00f0ff;
-            text-shadow: 0 0 10px #00f0ff;
-            animation: pulsado 1.5s infinite alternate;
-            margin-top: 20px;
-        }
-
-        @keyframes pulsado {
-            from { opacity: 0.2; }
-            to { opacity: 1; }
-        }
-
-        /* --- CONTENEDOR DE PANTALLAS --- */
-        .pantalla {
-            background-color: rgba(13, 13, 19, 0.98);
-            border: 3px solid #00f0ff;
-            box-shadow: 0 0 25px #00f0ff;
-            border-radius: 12px;
-            padding: 25px;
-            width: 90%;
-            max-width: 560px;
-            box-sizing: border-box;
+            background: rgba(15, 15, 20, 0.98);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            text-align: center;
+            z-index: 10;
         }
-
+        .oculto { display: none !important; }
+        
         h1 {
-            margin: 0 0 15px 0;
-            font-size: 28px;
+            margin: 0 0 10px 0;
+            font-size: 32px;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #fff;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px #00f0ff;
+            letter-spacing: 3px;
+            text-shadow: 0 0 15px rgba(255,255,255,0.2);
         }
+        h2 { margin: 0 0 15px 0; font-size: 20px; color: #ffcc00; }
 
-        h2 {
-            margin: 0 0 15px 0;
-            font-size: 18px;
-            color: #ff0077;
-            text-shadow: 0 0 10px #ff0077;
-        }
-
-        /* --- BOTONES NEÓN --- */
-        .btn-neon {
-            background: transparent;
+        .btn-menu {
+            background: #0095DD;
             color: white;
-            border: 2px solid #00f0ff;
-            padding: 12px 24px;
-            margin: 6px;
-            font-family: inherit;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
             font-size: 15px;
             font-weight: bold;
-            text-transform: uppercase;
             cursor: pointer;
-            border-radius: 6px;
-            width: 260px;
-            max-width: 100%;
-            box-shadow: 0 0 8px #00f0ff;
-            transition: all 0.2s ease, transform 0.1s;
+            border-radius: 4px;
+            width: 230px;
+            transition: background 0.2s, transform 0.1s;
         }
-
-        .btn-neon:hover {
-            background-color: #00f0ff;
-            color: #0d0d13;
-            box-shadow: 0 0 20px #00f0ff;
-            transform: scale(1.02);
-        }
-
-        .btn-verde {
-            border-color: #39ff14;
-            box-shadow: 0 0 8px #39ff14;
-        }
-        .btn-verde:hover {
-            background-color: #39ff14;
-            color: #0d0d13;
-            box-shadow: 0 0 20px #39ff14;
-        }
-
-        .btn-naranja {
-            border-color: #e67e22;
-            box-shadow: 0 0 8px #e67e22;
-        }
-        .btn-naranja:hover {
-            background-color: #e67e22;
-            color: white;
-            box-shadow: 0 0 20px #e67e22;
-        }
-
-        .btn-morado {
-            border-color: #8e44ad;
-            box-shadow: 0 0 8px #8e44ad;
-        }
-        .btn-morado:hover {
-            background-color: #8e44ad;
-            color: white;
-            box-shadow: 0 0 20px #8e44ad;
-        }
-
-        .btn-rojo {
-            border-color: #ff0077;
-            box-shadow: 0 0 8px #ff0077;
-        }
-        .btn-rojo:hover {
-            background-color: #ff0077;
-            color: #0d0d13;
-            box-shadow: 0 0 20px #ff0077;
-        }
-
-        .btn-neon:disabled {
-            border-color: #444 !important;
-            box-shadow: none !important;
-            color: #555 !important;
-            background: transparent !important;
-            cursor: not-allowed;
-        }
-
-        /* --- CONTENEDOR DE JUEGO (CANVAS + HUD) --- */
-        #contenedorJuego {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-            width: 100%;
-        }
-
-        #hudJuego {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 95%;
-            max-width: 560px;
-            font-size: 13px;
-            font-weight: bold;
-            color: #00f0ff;
-            text-shadow: 0 0 8px #00f0ff;
-            box-sizing: border-box;
-            padding: 0 5px;
-        }
-
-        #hudBonus {
-            color: #ffcc00;
-            text-shadow: 0 0 8px #ffcc00;
-            animation: flisflas 0.5s infinite alternate;
-        }
-
-        @keyframes flisflas {
-            from { opacity: 0.3; } to { opacity: 1; }
-        }
-
-        canvas {
-            border: 4px solid #00f0ff;
-            background-color: #050508;
-            box-shadow: 0px 0px 20px #00f0ff, inset 0px 0px 20px #00f0ff;
-            border-radius: 8px;
-            max-width: 95%;
-            height: auto;
-        }
-
-        #controlesJuego {
-            margin-top: 5px;
+        .btn-menu:hover { background: #0077b3; transform: scale(1.02); }
+        .btn-canje { background: #e67e22; }
+        .btn-canje:hover { background: #d35400; }
+        .btn-canje:disabled { background: #444; cursor: not-allowed; }
+        .btn-verde { background: #2ecc71; }
+        .btn-verde:hover { background: #27ae60; }
+        
+        .barra-controles-juego {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            right: 12px;
             display: flex;
             justify-content: center;
-            gap: 12px;
-            width: 100%;
-        }
-
-        .btn-juego-chico {
-            width: 130px;
-            padding: 8px 15px;
-            font-size: 13px;
-        }
-
-        /* --- SELECTOR DE NIVELES --- */
-        .grid-niveles {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 8px;
-            max-height: 200px;
-            overflow-y: auto;
-            width: 90%;
-            padding: 10px;
-            background: #141419;
-            border: 2px solid #333;
-            border-radius: 6px;
-            margin-bottom: 15px;
-        }
-
-        .btn-nivel {
-            background: transparent;
-            color: #00f0ff;
-            border: 1px solid #00f0ff;
-            padding: 8px;
-            font-weight: bold;
-            font-family: inherit;
-            cursor: pointer;
-            border-radius: 4px;
-            font-size: 13px;
-            box-shadow: 0 0 4px #00f0ff;
-        }
-
-        .btn-nivel.completado {
-            color: #39ff14;
-            border-color: #39ff14;
-            box-shadow: 0 0 4px #39ff14;
-        }
-
-        .btn-nivel.bloqueado {
-            border-color: #333;
-            color: #444;
-            box-shadow: none;
-            cursor: not-allowed;
-        }
-
-        .btn-nivel.bonus-badge {
-            border-width: 2px;
-            color: #ffcc00;
-            border-color: #ffcc00;
-            box-shadow: 0 0 6px #ffcc00;
-        }
-
-        /* --- TIENDA UNIFICADA --- */
-        .grid-tienda {
-            display: grid;
-            grid-template-columns: 1fr;
             gap: 10px;
-            width: 95%;
-            max-height: 180px;
-            overflow-y: auto;
-            margin-bottom: 15px;
-            padding-right: 5px;
+            z-index: 8;
         }
-
-        @media (min-width: 480px) {
-            .grid-tienda {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-        .item-tienda {
-            background: #141419;
-            border: 1px solid #333;
-            padding: 10px;
-            border-radius: 6px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 12px;
-        }
-
-        .item-tienda button {
-            width: 105px;
-            padding: 6px;
+        .btn-juego {
+            background: rgba(255, 255, 255, 0.1);
+            color: #aaa;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 5px 12px;
             font-size: 11px;
-            margin: 0;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: all 0.2s;
         }
+        .btn-juego:hover { background: rgba(255, 255, 255, 0.25); color: #fff; border-color: #fff; }
+        .btn-juego.activo-pausa { background: #e74c3c; color: white; border-color: #e74c3c; }
 
-        /* --- PANEL DE USUARIO Y LOGIN --- */
-        .panel-usuario {
-            width: 90%;
-            background: #141419;
-            border: 1px solid #333;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .input-arcade {
-            background: #050508;
-            border: 2px solid #00f0ff;
-            color: white;
-            padding: 8px;
-            font-family: inherit;
-            border-radius: 4px;
-            outline: none;
-            text-align: center;
-        }
-
-        .input-arcade:focus {
-            box-shadow: 0 0 8px #00f0ff;
-        }
-
-        /* --- CONFIGURACIÓN --- */
+        /* Panel Configuración */
         .panel-config {
-            background: #141419;
-            border: 2px solid #333;
+            background: #1e1e24;
             padding: 15px 25px;
             border-radius: 8px;
-            width: 90%;
+            width: 75%;
             display: flex;
             flex-direction: column;
             gap: 12px;
             margin-bottom: 15px;
         }
-
         .fila-config {
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-size: 14px;
         }
-
         .switch-input {
             cursor: pointer;
             width: 40px;
             height: 20px;
         }
-
         .slider-vol {
             width: 120px;
             cursor: pointer;
         }
 
+        .grid-niveles {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            max-height: 220px;
+            overflow-y: auto;
+            width: 85%;
+            padding: 10px;
+            background: #222;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+        .btn-nivel {
+            background: #34495e;
+            color: white;
+            border: none;
+            padding: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+        .btn-nivel.completado { background: #27ae60; }
+        .btn-nivel.bloqueado { background: #111; color: #444; cursor: not-allowed; }
+        .btn-nivel.bonus-badge { border: 2px solid #ffcc00; color: #ffcc00; }
+
+        .grid-tienda {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            width: 90%;
+            margin-bottom: 15px;
+        }
+        .item-tienda {
+            background: #25252b;
+            padding: 10px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+        }
+        .item-tienda button {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            cursor: pointer;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        .item-tienda button:disabled { background: #444; cursor: not-allowed; }
+
         .info-monedas {
             display: flex;
-            gap: 15px;
-            font-size: 14px;
+            gap: 25px;
+            font-size: 16px;
             margin-bottom: 15px;
             font-weight: bold;
-            background: #141419;
-            border: 1px solid #333;
-            padding: 8px 15px;
+            background: #1e1e24;
+            padding: 8px 20px;
             border-radius: 20px;
         }
-
-        .instrucciones {
-            color: #555;
-            font-size: 11px;
-            margin-top: 15px;
-            text-align: center;
-            padding: 0 10px;
-        }
-
-        /* --- OVERLAY DE NOTIFICACIONES RETRO --- */
-        .arcade-overlay {
+        .instrucciones { color: #555; font-size: 12px; margin-top: 12px; }
+        
+        .hud-top {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(13, 13, 19, 0.95);
+            top: 10px;
+            left: 15px;
+            right: 15px;
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
-            border-radius: 8px;
-            border: 4px solid #00f0ff;
-            box-sizing: border-box;
-            padding: 15px;
+            justify-content: space-between;
+            font-size: 14px;
+            font-weight: bold;
+            color: #aaa;
+            z-index: 5;
+            pointer-events: none;
         }
     </style>
 </head>
 <body>
 
-    <!-- ========================================== -->
-    <!-- SECUENCIA 1: VIDEO DE PRESENTACIÓN (5 SEG) -->
-    <!-- ========================================== -->
-    <div id="splashVideo" class="pantalla-completa">
-        <!-- El elemento de video reproduce una presentación abstracta. Si no carga, se activa la simulación decorativa inferior -->
-        <video class="video-presentacion" autoplay muted playsinline id="introVideo" onerror="cambiarASimulacionVideo()">
-            <source src="https://assets.mixkit.co/videos/preview/mixkit-retro-futuristic-grid-background-43093-large.mp4" type="video/mp4">
-            Tu navegador no soporta video.
-        </video>
-        <div id="simulacionIntro" class="simulacion-video oculto">
-            <h1 style="font-size: 40px; color: #ff0077;">NEON GAMES</h1>
-            <p style="color: #00f0ff; letter-spacing: 4px;">PRESENTA</p>
-        </div>
+    <div class="contenedor-principal">
+        <!-- Ejemplo de cómo debería quedar tu HUD de juego en el HTML -->
+<div id="hudJuego" class="oculto">
+    <div>Nivel: <span id="hudNivel">1</span> <span id="hudBonus" style="display:none;">¡BONUS!</span></div>
+    <div>Puntos: <span id="hudPuntos">0</span></div>
+    <div>Récord: <span id="hudRecord">0</span></div> <!-- NUEVO -->
+    <div id="hudVidas">❤️❤️❤️</div> <!-- NUEVO -->
+    <button id="btnPausa" onclick="alternarPausa()">Pausa</button>
+</div>
+
+        <!-- En tu HTML, asegurate de que el orden de los bloques sea este -->
+<div id="contenedorJuego" style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+    
+    <!-- El HUD con los puntos, récord y corazones -->
+    <div id="hudJuego" class="oculto">
+        <div>Nivel: <span id="hudNivel">1</span> <span id="hudBonus" style="display:none;">¡BONUS!</span></div>
+        <div>Puntos: <span id="hudPuntos">0</span></div>
+        <div>Récord: <span id="hudRecord">0</span></div>
+        <div id="hudVidas">❤️❤️❤️</div>
+        <button id="btnPausa" onclick="alternarPausa()">Pausa</button>
     </div>
 
-    <!-- ========================================== -->
-    <!-- SECUENCIA 2: IMAGEN DE ESPERA (5 SEG) -->
-    <!-- ========================================== -->
-    <div id="splashEspera" class="pantalla-completa oculto">
-        <div class="imagen-espera">
-            <h1 style="font-size: 36px; color: #39ff14; text-shadow: 0 0 15px #39ff14;">BRICK BREAKER ODYSSEY</h1>
-            <p style="color: #888;">PREPARANDO EL MOTOR ARCADE...</p>
-            <div class="neon-destello">ESPERE UN MOMENTO</div>
-        </div>
+    <!-- El lienzo del juego -->
+    <canvas id="juegoCanvas" width="560" height="400" style="border: 4px solid #333; background: #111;"></canvas>
+
+    <!-- LOS BOTONES DE CONTROL (Siempre abajo del canvas) -->
+    <div id="controlesJuego" class="oculto" style="margin-top: 10px; text-align: center;">
+        <!-- Acá van tus botones de dirección táctiles, o el botón de salir -->
+        <button onclick="salirAlMenuDesdeJuego()" style="padding: 10px 20px; background: #e74c3c; color: white; border: none; border-radius: 5px; cursor: pointer;">
+            Salir al Menú
+        </button>
     </div>
+</div>
 
-    <!-- ========================================== -->
-    <!-- PANTALLA 1: MENÚ PRINCIPAL -->
-    <!-- ========================================== -->
-    <div id="menuPrincipal" class="pantalla oculto">
-        <h1>Brick Breaker Odyssey</h1>
-        
-        <!-- Panel de Identificación / Guardado en la nube -->
-        <div class="panel-usuario">
-            <span id="txtUserEstado" style="font-size:12px; color: #00f0ff;">Guardado Local Activo</span>
-            <input type="text" id="inputMail" class="input-arcade" placeholder="INGRESA TU MAIL" value="">
-            <button class="btn-neon" style="font-size: 11px; padding: 6px; width: 100%; border-color: #ff0077; box-shadow: none;" onclick="conectarUsuarioCloud()">Guardar / Cargar Partida</button>
-        </div>
+        <!-- CANVAS -->
+        <canvas id="juegoCanvas" width="640" height="400"></canvas>
 
-        <div class="info-monedas">
-            <span>Puntos: <span id="mPuntos">0</span></span>
-            <span style="color: #ffcc00;">Coins: <span id="mCoins">0</span></span>
-        </div>
-        <button class="btn-neon btn-verde" style="font-size: 18px;" onclick="jugarNivelActualDirecto()">¡JUGAR!</button>
-        <button class="btn-neon" onclick="abrirNiveles()">Seleccionar Nivel</button>
-        <button class="btn-neon" style="border-color:#ffcc00; box-shadow: 0 0 8px #ffcc00;" onclick="abrirTienda()">Tienda</button>
-        <button class="btn-neon btn-morado" onclick="abrirConfig()">Configuración</button>
-        <div class="instrucciones">Controles: Flechas o teclas A/D en PC, arrastra el dedo en móvil</div>
-    </div>
-
-    <!-- ========================================== -->
-    <!-- PANTALLA 2: SELECTOR DE NIVELES -->
-    <!-- ========================================== -->
-    <div id="menuNiveles" class="pantalla oculto">
-        <h1>Selecciona un Nivel</h1>
-        <div class="grid-niveles" id="contenedorNiveles"></div>
-        <button class="btn-neon btn-rojo btn-juego-chico" onclick="volverAlMenu()">Volver</button>
-    </div>
-
-    <!-- ========================================== -->
-    <!-- PANTALLA 3: TIENDA UNIFICADA -->
-    <!-- ========================================== -->
-    <div id="menuTienda" class="pantalla oculto">
-        <h1>Tienda</h1>
-        <div class="info-monedas">
-            <span style="color: #ffcc00;">Coins: <span id="tCoins">0</span></span>
-            <span>Puntos: <span id="tPuntos">0</span></span>
-        </div>
-        
-        <!-- Canjear Puntos dentro de la Tienda -->
-        <button class="btn-neon btn-naranja" id="tBtnCanjear" style="width: 95%; margin-bottom: 15px;" onclick="canjearPuntosMenu()">Canjear 100 P por 1 Coin</button>
-
-        <div class="grid-tienda">
-            <div class="item-tienda"><span>🟢 Base Verde</span><button id="btn-skinBase-verde" class="btn-neon" onclick="comprarOEquiparMenu('skinBase', 'verde', 2)">2 C</button></div>
-            <div class="item-tienda"><span>🔴 Bola Roja</span><button id="btn-skinPelota-roja" class="btn-neon" onclick="comprarOEquiparMenu('skinPelota', 'roja', 4)">4 C</button></div>
-            <div class="item-tienda"><span>✨ Estela Neon</span><button id="btn-efecto-estela" class="btn-neon" onclick="comprarOEquiparMenu('efecto', 'estela', 6)">6 C</button></div>
-            <div class="item-tienda"><span>🔵 Base Azul Pro</span><button id="btn-skinBase-azulpro" class="btn-neon" onclick="comprarOEquiparMenu('skinBase', 'azulpro', 3)">3 C</button></div>
-            <!-- Nuevos ítems de la tienda -->
-            <div class="item-tienda"><span>🔥 Efecto Fuego</span><button id="btn-efecto-fuego" class="btn-neon" onclick="comprarOEquiparMenu('efecto', 'fuego', 6)">6 C</button></div>
-            <div class="item-tienda"><span>⚾ Bola Béisbol</span><button id="btn-skinPelota-baseball" class="btn-neon" onclick="comprarOEquiparMenu('skinPelota', 'baseball', 3)">3 C</button></div>
-            <div class="item-tienda"><span>🏏 Palo Béisbol</span><button id="btn-skinBase-baseball" class="btn-neon" onclick="comprarOEquiparMenu('skinBase', 'baseball', 3)">3 C</button></div>
-        </div>
-        <button class="btn-neon btn-rojo btn-juego-chico" onclick="volverAlMenu()">Volver</button>
-    </div>
-
-    <!-- ========================================== -->
-    <!-- PANTALLA 4: CONFIGURACIÓN -->
-    <!-- ========================================== -->
-    <div id="menuConfig" class="pantalla oculto">
-        <h1>Configuración</h1>
-        <div class="panel-config">
-            <div class="fila-config">
-                <span>Activar Sonidos:</span>
-                <input type="checkbox" id="cfgAudio" class="switch-input" checked onchange="actualizarConfigValores()">
+        <!-- MENU PRINCIPAL -->
+        <div id="menuPrincipal" class="pantalla">
+            <h1>Brick Breaker Odyssey</h1>
+            <div class="info-monedas">
+                <span>Puntos: <span id="mPuntos">0</span></span>
+                <span style="color: #ffcc00;">Coins: <span id="mCoins">0</span></span>
             </div>
-            <div class="fila-config">
-                <span>Volumen Maestro:</span>
-                <input type="range" id="cfgVolumen" class="slider-vol" min="0" max="1" step="0.05" value="0.5" onchange="actualizarConfigValores()">
-            </div>
-            <div class="fila-config">
-                <span>Vibración (Móviles):</span>
-                <input type="checkbox" id="cfgVibracion" class="switch-input" checked onchange="actualizarConfigValores()">
-            </div>
-            <div class="fila-config" style="margin-top: 10px;">
-                <span style="color:#ff0077; font-weight:bold;">Zona Peligrosa:</span>
-                <button class="btn-neon btn-rojo btn-juego-chico" style="padding:5px;" onclick="solicitarReiniciarProgreso()">Reiniciar Todo</button>
-            </div>
+            <!-- NUEO BOTÓN DIRECTO PARA NO QUEDAR TRABADO -->
+            <button class="btn-menu btn-verde" style="font-size: 18px; height: 50px;" onclick="jugarNivelActualDirecto()">¡JUGAR!</button>
+            <button class="btn-menu" style="background:#34495e;" onclick="abrirNiveles()">Seleccionar Nivel</button>
+            <button class="btn-menu" style="background:#e67e22;" id="mBtnCanjear" onclick="canjearPuntosMenu()">Canjear 100 P por 1 C</button>
+            <button class="btn-menu" style="background:#444;" onclick="abrirTienda()">Tienda de Skins</button>
+            <button class="btn-menu" style="background:#8e44ad;" onclick="abrirConfig()">Configuración</button>
         </div>
-        <button class="btn-neon btn-verde btn-juego-chico" onclick="volverAlMenu()">Guardar</button>
+
+        <!-- PANTALLA SELECTOR DE NIVELES -->
+        <div id="menuNiveles" class="pantalla oculto">
+            <h1>Selecciona un Nivel</h1>
+            <div class="grid-niveles" id="contenedorNiveles"></div>
+            <button class="btn-menu" style="background:#e74c3c; width: 120px;" onclick="volverAlMenu()">Volver</button>
+        </div>
+
+        <!-- PANTALLA DERROTA (GAME OVER INTERMEDIO) -->
+        <div id="menuDerrota" class="pantalla oculto">
+            <h1 style="color: #e74c3c;">¡Bola Perdida!</h1>
+            <h2>Nivel <span id="txtNivelDerrota">1</span> fallido</h2>
+            <button class="btn-menu btn-verde" onclick="reintentarNivelDerrota()">Intentar de Nuevo</button>
+            <button class="btn-menu" style="background: #555;" onclick="volverAlMenuDesdeDerrota()">Menú Principal</button>
+        </div>
+
+        <!-- PANTALLA VICTORIA -->
+        <div id="menuVictoria" class="pantalla oculto">
+            <h1 style="color: #2ecc71;">¡Nivel Completado!</h1>
+            <h2 id="txtSubVictoria">Ganaste Puntos directos</h2>
+            <button class="btn-menu btn-verde" id="btnSiguienteNivel" onclick="cargarSiguienteNivel()">Siguiente Nivel</button>
+            <button class="btn-menu" style="background: #e67e22;" onclick="irAMercadoDesdeVictoria()">Ir al Mercado</button>
+            <button class="btn-menu" style="background: #555;" onclick="volverAlMenuDesdeVictoria()">Menú Principal</button>
+        </div>
+
+        <!-- MENU DE COMPRAS -->
+        <div id="menuTienda" class="pantalla oculto">
+            <h1>Tienda de Diseños</h1>
+            <div class="info-monedas"><span style="color: #ffcc00;">Tus Coins: <span id="tCoins">0</span></span></div>
+            <div class="grid-tienda">
+                <div class="item-tienda"><span>🟢 Base Verde</span><button id="btn-skinBase-verde" onclick="comprarOEquiparMenu('skinBase', 'verde', 2)">2 C</button></div>
+                <div class="item-tienda"><span>🔴 Bola Roja</span><button id="btn-skinPelota-roja" onclick="comprarOEquiparMenu('skinPelota', 'roja', 4)">4 C</button></div>
+                <div class="item-tienda"><span>✨ Estela Neon</span><button id="btn-efecto-estela" onclick="comprarOEquiparMenu('efecto', 'estela', 6)">6 C</button></div>
+                <div class="item-tienda"><span>🔵 Base Azul Pro</span><button id="btn-skinBase-azulpro" onclick="comprarOEquiparMenu('skinBase', 'azulpro', 3)">3 C</button></div>
+            </div>
+            <button class="btn-menu" style="background:#e74c3c; width: 140px;" onclick="volverAlMenu()">Volver</button>
+        </div>
+
+        <!-- PANTALLA CONFIGURACIÓN -->
+        <div id="menuConfig" class="pantalla oculto">
+            <h1>Configuración</h1>
+            <div class="panel-config">
+                <div class="fila-config">
+                    <span>Activar Audio Game:</span>
+                    <input type="checkbox" id="cfgAudio" class="switch-input" checked onchange="actualizarConfigValores()">
+                </div>
+                <div class="fila-config">
+                    <span>Volumen Maestro:</span>
+                    <input type="range" id="cfgVolumen" class="slider-vol" min="0" max="1" step="0.05" value="0.5" onchange="actualizarConfigValores()">
+                </div>
+                <div class="fila-config">
+                    <span>Vibración (Haptic Móvil):</span>
+                    <input type="checkbox" id="cfgVibracion" class="switch-input" checked onchange="actualizarConfigValores()">
+                </div>
+                <div class="fila-config" style="margin-top: 10px;">
+                    <span style="color:#e74c3c; font-weight:bold;">Zona de Peligro:</span>
+                    <button class="btn-juego" style="background:#c0392b; color:white; border:none; padding:6px 12px;" onclick="solicitarReiniciarProgreso()">Reiniciar Todo</button>
+                </div>
+            </div>
+            <button class="btn-menu" style="background:#e74c3c; width: 140px;" onclick="volverAlMenu()">Guardar</button>
+        </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- PANTALLA JUEGO ACTIVO (HUD + CANVAS + BOTONES) -->
-    <!-- ========================================== -->
-    <div id="contenedorJuego" class="oculto">
-        
-        <!-- HUD Superior -->
-        <div id="hudJuego">
-            <div>Nivel: <span id="hudNivel">1</span> <span id="hudBonus" style="display:none;">¡BONUS x2!</span></div>
-            <div>Puntos: <span id="hudPuntos">0</span></div>
-            <div>Récord: <span id="hudRecord">0</span></div>
-            <div id="hudVidas">❤️❤️❤️</div>
-        </div>
+    <div class="instrucciones">◄ ► Flechas para mover | Click o Espacio para lanzar la bola | P para Pausa</div>
 
-        <!-- El Lienzo del Juego y sus modales Arcade integrados -->
-        <div id="wrapperCanvas" style="position: relative; max-width: 95%; display: flex; justify-content: center; align-items: center;">
-            <canvas id="juegoCanvas" width="560" height="400" class="oculto"></canvas>
-            
-            <!-- Modal de Victoria del Nivel -->
-            <div id="modalVictoria" class="arcade-overlay oculto" style="border-color: #39ff14;">
-                <h1 style="color: #39ff14; text-shadow: 0 0 10px #39ff14; font-size: 24px;">¡Nivel Completado!</h1>
-                <h2 id="txtSubVictoria" style="color: #ffcc00; text-shadow: 0 0 8px #ffcc00; font-size: 15px;">Avanzando en tu Odyssey...</h2>
-                <button class="btn-neon btn-verde btn-juego-chico" id="btnSiguienteNivel" onclick="cargarSiguienteNivel()">Siguiente</button>
-                <button class="btn-neon btn-naranja btn-juego-chico" onclick="irAMercadoDesdeVictoria()">Tienda</button>
-                <button class="btn-neon btn-juego-chico" onclick="volverAlMenuDesdeVictoria()">Menú</button>
-            </div>
+<script>
+    const canvas = document.getElementById("juegoCanvas");
+    const ctx = canvas.getContext("2d");
 
-            <!-- Modal de Derrota Total (Game Over) -->
-            <div id="modalDerrota" class="arcade-overlay oculto" style="border-color: #ff0077;">
-                <h1 style="color: #ff0077; text-shadow: 0 0 10px #ff0077; font-size: 24px;">¡Sin Vidas!</h1>
-                <h2 id="txtNivelDerrota" style="color: #aaa; text-shadow: none; font-size: 15px;">Nivel Fallido</h2>
-                <button class="btn-neon btn-verde btn-juego-chico" onclick="reintentarNivelDerrota()">Reintentar</button>
-                <button class="btn-neon btn-rojo btn-juego-chico" onclick="volverAlMenuDesdeDerrota()">Menú</button>
-            </div>
-        </div>
-        
-        <!-- Botonera Inferior (Siempre abajo del lienzo) -->
-        <div id="controlesJuego">
-            <button id="pauseBtn" class="btn-neon btn-juego-chico" onclick="togglePause()">PAUSA</button>
-            <button class="btn-neon btn-rojo btn-juego-chico" onclick="salirAlMenuDesdeJuego()">SALIR</button>
-        </div>
+    // --- CONFIGURACIÓN DE AUDIO Y AJUSTES DE USUARIO ---
+    let audioCtx = null;
+    let masterGainNode = null; 
+    let sec_intervalo = null; 
 
-    </div>
+    let cfgSonidoHabilitado = localStorage.getItem("cfgSonido") !== "false";
+    let cfgVolumenNivel = localStorage.getItem("cfgVolumenValue") !== null ? parseFloat(localStorage.getItem("cfgVolumenValue")) : 0.5;
+    let cfgVibracionHabilitada = localStorage.getItem("cfgVibracion") !== "false";
 
-    <!-- ========================================== -->
-    <!-- LÓGICA DEL MOTOR DE JUEGO -->
-    <!-- ========================================== -->
-    <script>
-        const canvas = document.getElementById("juegoCanvas");
-        const ctx = canvas.getContext("2d");
-        const pauseBtn = document.getElementById("pauseBtn");
-
-        // --- SISTEMA DE AUDIO (WEB AUDIO API RETRO) ---
-        let audioCtx = null;
-        let masterGainNode = null; 
-        let sec_intervalo = null; 
-        let tiempoMusicaActual = 220;
-
-        let cfgSonidoHabilitado = localStorage.getItem("cfgSonido") !== "false";
-        let cfgVolumenNivel = localStorage.getItem("cfgVolumenValue") !== null ? parseFloat(localStorage.getItem("cfgVolumenValue")) : 0.5;
-        let cfgVibracionHabilitada = localStorage.getItem("cfgVibracion") !== "false";
-
-        // Paleta de Colores de Neón
-        const NEON_CYAN = "#00f0ff";
-        const NEON_PINK = "#ff0077";
-        const NEON_GREEN = "#39ff14";
-
-        function iniciarAudio() {
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                masterGainNode = audioCtx.createGain();
-                masterGainNode.connect(audioCtx.destination);
-            }
-            masterGainNode.gain.setValueAtTime(cfgSonidoHabilitado ? (cfgVolumenNivel * 2.0) : 0, audioCtx.currentTime);
+    function iniciarAudio() {
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            masterGainNode = audioCtx.createGain();
+            masterGainNode.connect(audioCtx.destination);
         }
+        masterGainNode.gain.setValueAtTime(cfgSonidoHabilitado ? (cfgVolumenNivel * 2.0) : 0, audioCtx.currentTime);
+    }
 
-        function playSound(frecuencia, tipo, duracion, volumen = 0.2) {
-            if (!cfgSonidoHabilitado) return;
-            try {
-                iniciarAudio();
-                if (!audioCtx) return;
-                
-                let osc = audioCtx.createOscillator();
-                let gainNode = audioCtx.createGain();
-                
-                osc.type = tipo;
-                osc.frequency.setValueAtTime(frecuencia, audioCtx.currentTime);
-                
-                gainNode.gain.setValueAtTime(volumen, audioCtx.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duracion);
-                
-                osc.connect(gainNode);
-                gainNode.connect(masterGainNode);
-                
-                osc.start();
-                osc.stop(audioCtx.currentTime + duracion);
-            } catch(e) {}
-        }
-
-        // Efectos de Sonido
-        function sfxClick() { playSound(600, 'sine', 0.08, 0.2); }
-        function sfxLadrillo() { playSound(480, 'square', 0.06, 0.12); }
-        function sfxPaleta() { playSound(240, 'triangle', 0.12, 0.3); }
-        function sfxPared() { playSound(190, 'sine', 0.05, 0.15); }
-        function sfxPowerUp() { playSound(880, 'sine', 0.15, 0.25); setTimeout(() => playSound(1320, 'sine', 0.2, 0.25), 100); }
-        function sfxPowerDown() { playSound(300, 'sawtooth', 0.15, 0.2); setTimeout(() => playSound(150, 'sawtooth', 0.2, 0.2), 100); }
-        function sfxGameOver() { 
-            playSound(280, 'square', 0.18, 0.2);
-            setTimeout(() => playSound(180, 'square', 0.3, 0.2), 140);
-        }
-
-        function activarVibracion(ms) {
-            if (cfgVibracionHabilitada && navigator.vibrate) {
-                navigator.vibrate(ms);
-            }
-        }
-
-        // --- SISTEMA DE CONTROL DE SECUENCIA DE SPLASHES (10 SEG TOTAL) ---
-        window.addEventListener("DOMContentLoaded", () => {
-            // Intenta reproducir el video
-            const video = document.getElementById("introVideo");
-            if (video) {
-                video.play().catch(() => {
-                    cambiarASimulacionVideo();
-                });
-            }
-
-            // A los 5 segundos pasa de Video a Imagen de Espera
-            setTimeout(() => {
-                document.getElementById("splashVideo").classList.add("oculto");
-                document.getElementById("splashEspera").classList.remove("oculto");
-                
-                // A los otros 5 segundos (10 en total) pasa al Menú Principal
-                setTimeout(() => {
-                    document.getElementById("splashEspera").classList.add("oculto");
-                    document.getElementById("menuPrincipal").classList.remove("oculto");
-                    iniciarAudio();
-                }, 5000);
-
-            }, 5000);
-        });
-
-        function cambiarASimulacionVideo() {
-            document.getElementById("introVideo").classList.add("oculto");
-            document.getElementById("simulacionIntro").classList.remove("oculto");
-        }
-
-        // --- DATOS DE PERSISTENCIA (LOCAL Y SIMULACIÓN CLOUD FIRESTORE) ---
-        let puntos = parseInt(localStorage.getItem("puntos")) || 0;
-        let recordMaximo = parseInt(localStorage.getItem("recordMaximo")) || 0;
-        let coins = parseInt(localStorage.getItem("coins")) || 0;
-        let nivelMaximoDesbloqueado = parseInt(localStorage.getItem("nivelMaxDesbloqueado")) || 1;
-        let inventario = JSON.parse(localStorage.getItem("inventario")) || { skinBase: ["default"], skinPelota: ["default"], efecto: ["none"] };
-        let equipado = JSON.parse(localStorage.getItem("equipado")) || { skinBase: "default", skinPelota: "default", efecto: "none" };
-        let usuarioEmail = localStorage.getItem("usuarioEmail") || "";
-
-        // Inicializar input si hay email guardado
-        if (usuarioEmail) {
-            document.getElementById("inputMail").value = usuarioEmail;
-            document.getElementById("txtUserEstado").innerText = "Usuario: " + usuarioEmail;
-            document.getElementById("txtUserEstado").style.color = "#39ff14";
-        }
-
-        // Simulación robusta de guardado de datos en la nube vinculada al email
-        function conectarUsuarioCloud() {
-            const email = document.getElementById("inputMail").value.trim();
-            if (!email || !email.includes("@")) {
-                alert("Por favor ingresa un correo electrónico válido para resguardar tus datos.");
-                return;
-            }
-            sfxClick();
-            
-            // Simular carga de base de datos en la nube (Firestore mock)
-            const claveLlamada = "cloud_" + email;
-            const datosExistentes = localStorage.getItem(claveLlamada);
-            
-            if (datosExistentes) {
-                // Si ya existía el mail, carga su progreso
-                const datos = JSON.parse(datosExistentes);
-                puntos = datos.puntos;
-                recordMaximo = datos.recordMaximo;
-                coins = datos.coins;
-                nivelMaximoDesbloqueado = datos.nivelMaximoDesbloqueado;
-                inventario = datos.inventario;
-                equipado = datos.equipado;
-                
-                alert("¡Partida recuperada con éxito de la nube!");
-            } else {
-                // Si es nuevo, crea el registro con el progreso actual
-                const datosAAgregar = {
-                    puntos: puntos,
-                    recordMaximo: recordMaximo,
-                    coins: coins,
-                    nivelMaximoDesbloqueado: nivelMaximoDesbloqueado,
-                    inventario: inventario,
-                    equipado: equipado
-                };
-                localStorage.setItem(claveLlamada, JSON.stringify(datosAAgregar));
-                alert("¡Se ha creado un nuevo perfil de juego para este correo!");
-            }
-            
-            usuarioEmail = email;
-            localStorage.setItem("usuarioEmail", email);
-            document.getElementById("txtUserEstado").innerText = "Sincronizado: " + email;
-            document.getElementById("txtUserEstado").style.color = "#39ff14";
-            
-            actualizarUI();
-        }
-
-        function sincronizarProgresoACloud() {
-            if (usuarioEmail) {
-                const datosAAgregar = {
-                    puntos: puntos,
-                    recordMaximo: recordMaximo,
-                    coins: coins,
-                    nivelMaximoDesbloqueado: nivelMaximoDesbloqueado,
-                    inventario: inventario,
-                    equipado: equipado
-                };
-                localStorage.setItem("cloud_" + usuarioEmail, JSON.stringify(datosAAgregar));
-            }
-        }
-
-        // --- VARIABLES DE ESTADO Y FLUX ---
-        let enPartida = false;
-        let juegoPausado = false;
-        let pelotaLanzada = false;
-        let nivelActual = 1;
-        let esNivelBonus = false;
-        let vidas = 3;
-
-        // --- ATRIBUTOS FISICOS ---
-        let radioPelota = 9;
-        let altoPaleta = 12;
-        let anchoPaletaBase = 95;
-        let anchoPaleta = anchoPaletaBase;
-        let paletaX = (canvas.width - anchoPaleta) / 2;
-        let velocidadPaletaBase = 7;
-        let velocidadPaleta = velocidadPaletaBase;
-        
-        let flechaDerecha = false;
-        let flechaIzquierda = false;
-
-        let pelotas = [];
-        let poderes = [];
-        let estrellaMarioActiva = false;
-        let estrellaTiempoRestante = 0;
-        let colorEstrellaFlisFlas = 0;
-
-        let ladrillos = [];
-        let columnasLadrillos, filasLadrillos;
-        let anchoLadrillo = 48;
-        let altoLadrillo = 18;
-        let paddingLadrillo = 6;
-        let margenSuperiorLadrillo = 55;
-        let margenIzquierdoLadrillo = 20;
-
-        // --- ESCUCHA DE TECLADO ---
-        window.addEventListener("keydown", (e) => {
-            if (e.key === "Right" || e.key === "ArrowRight" || e.key === "d" || e.key === "D") flechaDerecha = true;
-            if (e.key === "Left" || e.key === "ArrowLeft" || e.key === "a" || e.key === "A") flechaIzquierda = true;
-            
-            if (enPartida && !juegoPausado && !pelotaLanzada && e.key === " ") lanzarPelota();
-            if (enPartida && (e.key === "p" || e.key === "P")) togglePause();
-        });
-        
-        window.addEventListener("keyup", (e) => {
-            if (e.key === "Right" || e.key === "ArrowRight" || e.key === "d" || e.key === "D") flechaDerecha = false;
-            if (e.key === "Left" || e.key === "ArrowLeft" || e.key === "a" || e.key === "A") flechaIzquierda = false;
-        });
-
-        // --- CONTROL TÁCTIL EXCLUSIVO (MÓVIL) ---
-        function manejarToqueTáctil(e) {
-            if (!enPartida || juegoPausado) return;
-            
-            let touch = e.touches[0];
-            let rect = canvas.getBoundingClientRect();
-            
-            let escalaX = canvas.width / rect.width;
-            let touchX = (touch.clientX - rect.left) * escalaX;
-            
-            if (!pelotaLanzada) {
-                lanzarPelota();
-            }
-
-            paletaX = touchX - anchoPaleta / 2;
-            
-            if (paletaX < 0) paletaX = 0;
-            if (paletaX > canvas.width - anchoPaleta) paletaX = canvas.width - anchoPaleta;
-            
-            e.preventDefault();
-        }
-
-        canvas.addEventListener("touchstart", manejarToqueTáctil, { passive: false });
-        canvas.addEventListener("touchmove", manejarToqueTáctil, { passive: false });
-
-        function hookClicksConSonido(callback) { sfxClick(); if(callback) callback(); }
-        
-        function lanzarPelota() { 
-            sfxPaleta(); 
-            pelotaLanzada = true; 
-            if (pelotas.length > 0) {
-                let multiplicadorVelocidad = 1 + (nivelActual * 0.04);
-                if (multiplicadorVelocidad > 1.8) multiplicadorVelocidad = 1.8;
-                pelotas[0].dx = 3.5 * multiplicadorVelocidad;
-                pelotas[0].dy = -3.5 * multiplicadorVelocidad;
-            }
-        }
-
-        function resetearPosiciones() {
-            pelotaLanzada = false;
-            anchoPaleta = anchoPaletaBase;
-            velocidadPaleta = velocidadPaletaBase;
-            estrellaMarioActiva = false;
-            estrellaTiempoRestante = 0;
-            poderes = [];
-            
-            paletaX = (canvas.width - anchoPaleta) / 2;
-            
-            let xInicial = paletaX + anchoPaleta / 2;
-            let yInicial = canvas.height - altoPaleta - 25 - radioPelota;
-            
-            pelotas = [{
-                x: xInicial,
-                y: yInicial,
-                dx: 0,
-                dy: 0,
-                estelaHistorial: []
-            }];
-        }
-
-        function actualizarVidasUI() {
-            let corazones = "";
-            for (let i = 0; i < vidas; i++) corazones += "❤️";
-            if (corazones === "") corazones = "💀";
-            document.getElementById("hudVidas").innerText = corazones;
-        }
-
-        function togglePause() {
-            if (!enPartida) return;
-            sfxClick();
-            juegoPausado = !juegoPausado;
-            
-            pauseBtn.innerText = juegoPausado ? "REANUDAR" : "PAUSA";
-            pauseBtn.style.borderColor = juegoPausado ? NEON_GREEN : NEON_PINK;
-            pauseBtn.style.boxShadow = juegoPausado ? `0 0 15px ${NEON_GREEN}` : `0 0 15px ${NEON_PINK}`;
-            pauseBtn.style.color = juegoPausado ? NEON_GREEN : NEON_PINK;
-            if (juegoPausado) pauseBtn.classList.add("activo-pausa");
-            else pauseBtn.classList.remove("activo-pausa");
-        }
-
-        function salirAlMenuDesdeJuego() {
-            sfxClick();
-            enPartida = false;
-            juegoPausado = false;
-            detenerMusica();
-            
-            document.getElementById("modalVictoria").classList.add("oculto");
-            document.getElementById("modalDerrota").classList.add("oculto");
-            
-            pauseBtn.innerText = "PAUSA";
-            pauseBtn.style.borderColor = NEON_PINK;
-            pauseBtn.style.boxShadow = `0 0 10px ${NEON_PINK}`;
-            pauseBtn.style.color = NEON_PINK;
-            pauseBtn.classList.remove("activo-pausa");
-
-            document.getElementById("contenedorJuego").classList.add("oculto");
-            document.getElementById("juegoCanvas").classList.add("oculto");
-            document.getElementById("menuPrincipal").classList.remove("oculto");
-            actualizarUI();
-        }
-
-        function guardarDatos() {
-            localStorage.setItem("puntos", puntos);
-            localStorage.setItem("recordMaximo", recordMaximo);
-            localStorage.setItem("coins", coins);
-            localStorage.setItem("nivelMaxDesbloqueado", nivelMaximoDesbloqueado);
-            localStorage.setItem("inventario", JSON.stringify(inventario));
-            localStorage.setItem("equipado", JSON.stringify(equipado));
-            sincronizarProgresoACloud();
-        }
-
-        function actualizarUI() {
-            if (puntos > recordMaximo) {
-                recordMaximo = puntos;
-            }
-            
-            let elRecord = document.getElementById("hudRecord");
-            if (elRecord) elRecord.innerText = recordMaximo;
-            
-            let elHudPuntos = document.getElementById("hudPuntos");
-            if (elHudPuntos) elHudPuntos.innerText = puntos;
-
-            guardarDatos();
-
-            let mP = document.getElementById("mPuntos"); if(mP) mP.innerText = puntos;
-            let mC = document.getElementById("mCoins");  if(mC) mC.innerText = coins;
-            let tC = document.getElementById("tCoins");  if(tC) tC.innerText = coins;
-            let tP = document.getElementById("tPuntos");  if(tP) tP.innerText = puntos;
-            let mBtn = document.getElementById("mBtnCanjear"); if(mBtn) mBtn.disabled = puntos < 100;
-            let tBtn = document.getElementById("tBtnCanjear"); if(tBtn) tBtn.disabled = puntos < 100;
-
-            // Actualizar tienda con los nuevos ítems incorporados
-            actualizarBotonTienda("skinBase", "verde", 2);
-            actualizarBotonTienda("skinBase", "azulpro", 3);
-            actualizarBotonTienda("skinPelota", "roja", 4);
-            actualizarBotonTienda("efecto", "estela", 6);
-            actualizarBotonTienda("efecto", "fuego", 6);
-            actualizarBotonTienda("skinPelota", "baseball", 3);
-            actualizarBotonTienda("skinBase", "baseball", 3);
-        }
-
-        function actualizarBotonTienda(tipo, id, precio) {
-            const btn = document.getElementById(`btn-${tipo}-${id}`);
-            if (!btn) return;
-            if (equipado[tipo] === id) { btn.innerText = "Equipado"; btn.disabled = true; btn.style.background = "#2ecc71"; }
-            else if (inventario[tipo].includes(id)) { btn.innerText = "Equipar"; btn.disabled = false; btn.style.background = "#0095DD"; }
-            else { btn.innerText = `${precio} C`; btn.disabled = coins < precio; btn.style.background = "#27ae60"; }
-        }
-
-        function generarNivel(numNivel) {
-            esNivelBonus = (numNivel % 10 === 0);
-            
-            if (numNivel <= 5) filasLadrillos = 3;
-            else if (numNivel <= 15) filasLadrillos = 4;
-            else if (numNivel <= 30) filasLadrillos = 5;
-            else if (numNivel <= 50) filasLadrillos = 6;
-            else filasLadrillos = 7;
-
-            columnasLadrillos = 10;
-            
-            let anchoTotalMatriz = (columnasLadrillos * (anchoLadrillo + paddingLadrillo)) - paddingLadrillo;
-            margenIzquierdoLadrillo = (canvas.width - anchoTotalMatriz) / 2;
-
-            ladrillos = [];
-            for (let c = 0; c < columnasLadrillos; c++) {
-                ladrillos[c] = [];
-                for (let r = 0; r < filasLadrillos; r++) {
-                    let activo = 1;
-
-                    if (!esNivelBonus) {
-                        let variantePatron = numNivel % 5; 
-                        if (variantePatron === 1 && (c + r) % 2 === 0) activo = 0; // Ajedrez
-                        else if (variantePatron === 2 && (c < r || c >= columnasLadrillos - r)) activo = 0; // Pirámide
-                        else if (variantePatron === 3 && r % 2 === 1) activo = 0; // Líneas intercaladas
-                        else if (variantePatron === 4 && c % 2 === 0 && r > 1) activo = 0; // Castillo
-                    }
-                    ladrillos[c][r] = { x: 0, y: 0, activo: activo };
-                }
-            }
-        }
-
-        function arrancarNivelEspecifico(numNivel) {
+    function playSound(frecuencia, tipo, duracion, volumen = 0.2) {
+        if (!cfgSonidoHabilitado) return;
+        try {
             iniciarAudio();
-            nivelActual = numNivel;
-            vidas = 3; 
-            generarNivel(nivelActual);
-            resetearPosiciones();
+            if (!audioCtx) return;
             
-            document.getElementById("modalVictoria").classList.add("oculto");
-            document.getElementById("modalDerrota").classList.add("oculto");
+            let osc = audioCtx.createOscillator();
+            let gainNode = audioCtx.createGain();
             
-            document.getElementById("hudNivel").innerText = nivelActual;
-            document.getElementById("hudBonus").style.display = esNivelBonus ? "inline" : "none";
+            osc.type = tipo;
+            osc.frequency.setValueAtTime(frecuencia, audioCtx.currentTime);
             
-            document.getElementById("contenedorJuego").classList.remove("oculto");
-            document.getElementById("juegoCanvas").classList.remove("oculto");
+            gainNode.gain.setValueAtTime(volumen, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duracion);
             
-            actualizarVidasUI();
-            actualizarUI();
+            osc.connect(gainNode);
+            gainNode.connect(masterGainNode);
             
-            enPartida = true;
-            juegoPausado = false;
-            reproducirMusicaDeFondo();
+            osc.start();
+            osc.stop(audioCtx.currentTime + duracion);
+        } catch(e) {}
+    }
+
+    function sfxClick() { playSound(600, 'sine', 0.08, 0.2); }
+    function sfxLadrillo() { playSound(480, 'square', 0.06, 0.12); }
+    function sfxPaleta() { playSound(240, 'triangle', 0.12, 0.3); }
+    function sfxPared() { playSound(190, 'sine', 0.05, 0.15); }
+    function sfxPowerUp() { playSound(880, 'sine', 0.15, 0.25); setTimeout(() => playSound(1320, 'sine', 0.2, 0.25), 100); }
+    function sfxPowerDown() { playSound(300, 'sawtooth', 0.15, 0.2); setTimeout(() => playSound(150, 'sawtooth', 0.2, 0.2), 100); }
+    function sfxGameOver() { 
+        playSound(280, 'square', 0.18, 0.2);
+        setTimeout(() => playSound(180, 'square', 0.3, 0.2), 140);
+    }
+
+    function activarVibracion(ms) {
+        if (cfgVibracionHabilitada && navigator.vibrate) {
+            navigator.vibrate(ms);
         }
+    }
 
-        // --- SISTEMA DE SELECCIÓN Y CONFIGURACIÓN DE PANTALLAS ---
-        function abrirNiveles() { hookClicksConSonido(() => { construirSelectorNiveles(); document.getElementById("menuPrincipal").classList.add("oculto"); document.getElementById("menuNiveles").classList.remove("oculto"); }); }
-        function volverAlMenu() { hookClicksConSonido(() => { document.getElementById("menuNiveles").classList.add("oculto"); document.getElementById("menuTienda").classList.add("oculto"); document.getElementById("menuConfig").classList.add("oculto"); document.getElementById("menuPrincipal").classList.remove("oculto"); actualizarUI(); }); }
-        function abrirTienda() { hookClicksConSonido(() => { document.getElementById("menuPrincipal").classList.add("oculto"); document.getElementById("menuTienda").classList.remove("oculto"); actualizarUI(); }); }
-        function abrirConfig() { hookClicksConSonido(() => { sincronizarUIConfig(); document.getElementById("menuPrincipal").classList.add("oculto"); document.getElementById("menuConfig").classList.remove("oculto"); }); }
-        
-        function canjearPuntosMenu() { 
-            hookClicksConSonido(() => { 
-                if (puntos >= 100) { 
-                    puntos -= 100; 
-                    coins += 1; 
-                    actualizarUI(); 
-                } 
-            }); 
+    function reproducirMusicaDeFondo() {
+    detenerMusica();
+    if (!enPartida || !cfgSonidoHabilitado) return;
+
+    let paso = 0;
+    let escala = [261.63, 293.66, 329.63, 392.00, 440.00];
+    let factorNivel = 1 + ((nivelActual % 5) * 0.05);
+
+    // Función interna cíclica que se auto-regula si cambia el estado del juego
+    function ejecutarBucleAudio() {
+        if (!enPartida || juegoPausado) return;
+
+        // Verificar si hay power-ups frenéticos activos para acelerar la música
+        let requiereMusicaRapida = estrellaMarioActiva || (pelotas.length > 1);
+        let tempoObjetivo = requiereMusicaRapida ? 130 : 220; // 130ms es modo turbo
+
+        // Lógica de notas
+        let notasPatron = [0, 2, 3, 1, 4, 2, 3, 0];
+        let notaIndex = notasPatron[paso % notasPatron.length];
+        let frecNota = escala[notaIndex] * factorNivel;
+
+        // Si la estrella de Mario está activa, sube una octava el tono para darle color
+        if (estrellaMarioActiva) frecNota *= 1.5;
+
+        if (paso % 2 === 0) {
+            playSound(frecNota, estrellaMarioActiva ? 'square' : 'triangle', requiereMusicaRapida ? 0.10 : 0.18, 0.04); 
         }
-        
-        function jugarNivelActualDirecto() {
-            hookClicksConSonido(() => {
-                document.getElementById("menuPrincipal").classList.add("oculto");
-                arrancarNivelEspecifico(nivelMaximoDesbloqueado);
-            });
-        }
+        paso++;
 
-        function comprarOEquiparMenu(tipo, id, precio) {
-            hookClicksConSonido(() => {
-                if (inventario[tipo].includes(id)) equipado[tipo] = id;
-                else if (coins >= precio) { coins -= precio; inventario[tipo].push(id); equipado[tipo] = id; }
-                actualizarUI();
-            });
-        }
-
-        function construirSelectorNiveles() {
-            const contenedor = document.getElementById("contenedorNiveles");
-            contenedor.innerHTML = "";
-            for (let i = 1; i <= 100; i++) {
-                const btn = document.createElement("button");
-                btn.innerText = i;
-                let claseExtra = i % 10 === 0 ? " bonus-badge" : "";
-
-                if (i <= nivelMaximoDesbloqueado) {
-                    btn.className = "btn-nivel" + claseExtra;
-                    btn.onclick = () => hookClicksConSonido(() => arrancarNivelEspecifico(i));
-                } else {
-                    btn.className = "btn-nivel bloqueado" + claseExtra;
-                }
-                contenedor.appendChild(btn);
-            }
-        }
-
-        // --- AUDIO CONTROLLER CON VELOCIDAD AUTO-REGULADA ---
-        function reproducirMusicaDeFondo() {
-            detenerMusica();
-            if (!enPartida || !cfgSonidoHabilitado) return;
-
-            let paso = 0;
-            let escala = [261.63, 293.66, 329.63, 392.00, 440.00]; 
-            let factorNivel = 1 + ((nivelActual % 5) * 0.05);
-
-            function ejecutarBucleAudio() {
-                if (!enPartida || juegoPausado) return;
-
-                let modoFrenetico = estrellaMarioActiva || (pelotas.length > 1);
-                let tempoObjetivo = modoFrenetico ? 130 : 220;
-
-                let notasPatron = [0, 2, 3, 1, 4, 2, 3, 0];
-                let notaIndex = notasPatron[paso % notasPatron.length];
-                let frecNota = escala[notaIndex] * factorNivel;
-
-                if (estrellaMarioActiva) frecNota *= 1.5; 
-
-                if (paso % 2 === 0) {
-                    playSound(frecNota, estrellaMarioActiva ? 'square' : 'triangle', modoFrenetico ? 0.10 : 0.18, 0.04); 
-                }
-                paso++;
-
-                if (tempoObjetivo !== tiempoMusicaActual) {
-                    tiempoMusicaActual = tempoObjetivo;
-                    clearInterval(sec_intervalo);
-                    sec_intervalo = setInterval(ejecutarBucleAudio, tiempoMusicaActual);
-                }
-            }
-
-            tiempoMusicaActual = (estrellaMarioActiva || pelotas.length > 1) ? 130 : 220;
+        // Si el tempo cambió, destruimos este timer y creamos uno nuevo con la velocidad corregida
+        if (tempoObjetivo !== tiempoMusicaActual) {
+            tiempoMusicaActual = tempoObjetivo;
+            clearInterval(sec_intervalo);
             sec_intervalo = setInterval(ejecutarBucleAudio, tiempoMusicaActual);
         }
+    }
 
-        function detenerMusica() {
-            if (sec_intervalo) { clearInterval(sec_intervalo); sec_intervalo = null; }
+    tiempoMusicaActual = (estrellaMarioActiva || pelotas.length > 1) ? 130 : 220;
+    sec_intervalo = setInterval(ejecutarBucleAudio, tiempoMusicaActual);
+}
+
+    function detenerMusica() {
+        if (sec_intervalo) { clearInterval(sec_intervalo); sec_intervalo = null; }
+    }
+
+    function sincronizarUIConfig() {
+        document.getElementById("cfgAudio").checked = cfgSonidoHabilitado;
+        document.getElementById("cfgVolumen").value = cfgVolumenNivel;
+        document.getElementById("cfgVibracion").checked = cfgVibracionHabilitada;
+    }
+
+    function actualizarConfigValores() {
+        cfgSonidoHabilitado = document.getElementById("cfgAudio").checked;
+        cfgVolumenNivel = parseFloat(document.getElementById("cfgVolumen").value);
+        cfgVibracionHabilitada = document.getElementById("cfgVibracion").checked;
+
+        localStorage.setItem("cfgSonido", cfgSonidoHabilitado);
+        localStorage.setItem("cfgVolumenValue", cfgVolumenNivel);
+        localStorage.setItem("cfgVibracion", cfgVibracionHabilitada);
+
+        if (audioCtx && masterGainNode) {
+            masterGainNode.gain.setValueAtTime(cfgSonidoHabilitado ? (cfgVolumenNivel * 2.0) : 0, audioCtx.currentTime);
         }
+        if (cfgSonidoHabilitado && !sec_intervalo && enPartida) reproducirMusicaDeFondo();
+        if (!cfgSonidoHabilitado) detenerMusica();
+    }
 
-        // --- PROCESADOR DE PODERES ---
-        function soltarPoder(bloqueX, bloqueY) {
-            if (Math.random() > 0.22) return; 
-            let powerAleatorio = TIPOS_PODER[Math.floor(Math.random() * TIPOS_PODER.length)];
-            poderes.push({
-                x: bloqueX + anchoLadrillo / 2,
-                y: bloqueY + altoLadrillo,
-                dy: 2,
-                info: powerAleatorio
-            });
+    function solicitarReiniciarProgreso() {
+        if(confirm("¿Estás seguro de que querés borrar todos tus puntos, monedas y niveles desbloqueados?")) {
+            localStorage.clear();
+            puntos = 0;
+            recordMaximo = 0;
+            coins = 0;
+            nivelMaximoDesbloqueado = 1;
+            inventario = { skinBase: ["default"], skinPelota: ["default"], efecto: ["none"] };
+            equipado = { skinBase: "default", skinPelota: "default", efecto: "none" };
+            cfgSonidoHabilitado = true;
+            cfgVolumenNivel = 0.5;
+            cfgVibracionHabilitada = true;
+            sincronizarUIConfig();
+            actualizarConfigValores();
+            actualizarUI();
+            alert("Progreso reseteado. El Nivel 1 está listo.");
         }
+    }
 
-        function aplicarPoder(item) {
-            if (item.bueno) sfxPowerUp(); else sfxPowerDown();
-            activarVibracion(40);
+    // --- DATOS PERSISTENTES ---
+    let puntos = parseInt(localStorage.getItem("puntos")) || 0;
+    let recordMaximo = parseInt(localStorage.getItem("recordMaximo")) || 0;
+    let coins = parseInt(localStorage.getItem("coins")) || 0;
+    let nivelMaximoDesbloqueado = parseInt(localStorage.getItem("nivelMaxDesbloqueado")) || 1;
+    let inventario = JSON.parse(localStorage.getItem("inventario")) || { skinBase: ["default"], skinPelota: ["default"], efecto: ["none"] };
+    let equipado = JSON.parse(localStorage.getItem("equipado")) || { skinBase: "default", skinPelota: "default", efecto: "none" };
 
-            switch(item.tipo) {
-                case "ALARGAR":        anchoPaleta = anchoPaletaBase * 1.4; break;
-                case "ACHICAR":        anchoPaleta = anchoPaletaBase * 0.65; break;
-                case "PALETA_RAPIDA":  velocidadPaleta = velocidadPaletaBase * 1.5; break;
-                case "PALETA_LENTA":   velocidadPaleta = velocidadPaletaBase * 0.6; break;
-                case "PELOTA_RAPIDA":  pelotas.forEach(p => { p.dx *= 1.25; p.dy *= 1.25; }); break;
-                case "PELOTA_LENTA":   pelotas.forEach(p => { p.dx *= 0.75; p.dy *= 0.75; }); break;
-                case "ESTRELLA":       estrellaMarioActiva = true; estrellaTiempoRestante = 450; break;
-                case "MULTIPLICAR":
-                    let clonadas = [];
-                    pelotas.forEach(p => {
-                        clonadas.push({ x: p.x, y: p.y, dx: p.dx - 1.2, dy: -Math.abs(p.dy), estelaHistorial: [] });
-                        clonadas.push({ x: p.x, y: p.y, dx: p.dx + 1.2, dy: -Math.abs(p.dy), estelaHistorial: [] });
-                    });
-                    pelotas = pelotas.concat(clonadas);
-                    break;
+    // --- VARIABLES DE CONTROL ---
+    let enPartida = false;
+    let juegoPausado = false;
+    let pelotaLanzada = false;
+    let nivelActual = 1;
+    let esNivelBonus = false;
+    let vidas = 3;
+
+    // --- VARIABLES DE DISEÑO Y MECÁNICAS ---
+    let radioPelota = 9;
+    let altoPaleta = 12;
+    let anchoPaletaBase = 95;
+    let anchoPaleta = anchoPaletaBase;
+    let paletaX = (canvas.width - anchoPaleta) / 2;
+    let velocidadPaletaBase = 7;
+    let velocidadPaleta = velocidadPaletaBase;
+    
+    let flechaDerecha = false;
+    let flechaIzquierda = false;
+
+    // Soporte para múltiples pelotas y cápsulas de poder
+    let pelotas = [];
+    let poderes = [];
+    let estrellaMarioActiva = false;
+    let estrellaTiempoRestante = 0;
+    let colorEstrellaFlisFlas = 0;
+
+    // Tipos de poderes disponibles en el juego
+    const TIPOS_PODER = [
+        { tipo: "ALARGAR", color: "#2ecc71", letra: "W", bueno: true },
+        { tipo: "ACHICAR", color: "#e74c3c", letra: "S", bueno: false },
+        { tipo: "MULTIPLICAR", color: "#f1c40f", letra: "X3", bueno: true },
+        { tipo: "PALETA_RAPIDA", color: "#3498db", letra: "V+", bueno: true },
+        { tipo: "PALETA_LENTA", color: "#9b59b6", letra: "V-", bueno: false },
+        { tipo: "PELOTA_RAPIDA", color: "#e67e22", letra: "B+", bueno: false },
+        { tipo: "PELOTA_LENTA", color: "#1abc9c", letra: "B-", bueno: true },
+        { tipo: "ESTRELLA", color: "rainbow", letra: "★", bueno: true }
+    ];
+
+    let ladrillos = [];
+    let columnasLadrillos, filasLadrillos;
+    let anchoLadrillo = 54;
+    let altoLadrillo = 18;
+    let paddingLadrillo = 6;
+    let margenSuperiorLadrillo = 55;
+    let margenIzquierdoLadrillo = 20;
+
+    // --- GENERACIÓN DE NIVEL DINÁMICA Y ESCALABLE ---
+function generarNivel(numNivel) {
+    esNivelBonus = (numNivel % 10 === 0);
+    
+    // Las filas crecen de forma constante con el nivel:
+    // Nivel 1-5: 3 filas | Nivel 6-15: 4 filas | Nivel 16-30: 5 filas | Nivel 31-50: 6 filas | Nivel 51+: 7 filas
+    if (numNivel <= 5) filasLadrillos = 3;
+    else if (numNivel <= 15) filasLadrillos = 4;
+    else if (numNivel <= 30) filasLadrillos = 5;
+    else if (numNivel <= 50) filasLadrillos = 6;
+    else filasLadrillos = 7;
+
+    columnasLadrillos = 10;
+    
+    let anchoTotalMatriz = (columnasLadrillos * (anchoLadrillo + paddingLadrillo)) - paddingLadrillo;
+    margenIzquierdoLadrillo = (canvas.width - anchoTotalMatriz) / 2;
+
+    ladrillos = [];
+    for(let c = 0; c < columnasLadrillos; c++) {
+        ladrillos[c] = [];
+        for(let r = 0; r < filasLadrillos; r++) {
+            let activo = 1; // Por defecto el bloque está vivo
+
+            if (!esNivelBonus) {
+                // Selector de patrones complejos según el residuo del nivel para máxima variedad
+                let patron = numNivel % 5; 
+                
+                if (patron === 1) {
+                    // Patrón 1: Tablero de Ajedrez alternado
+                    if ((c + r) % 2 === 0) activo = 0;
+                } 
+                else if (patron === 2) {
+                    // Patrón 2: Pirámide invertida (quita las esquinas superiores)
+                    if (c < r || c >= columnasLadrillos - r) activo = 0;
+                } 
+                else if (patron === 3) {
+                    // Patrón 3: Líneas horizontales intercaladas vacías
+                    if (r % 2 === 1) activo = 0;
+                } 
+                else if (patron === 4) {
+                    // Patrón 4: Columnas tipo castillo (intercala columnas vacías)
+                    if (c % 2 === 0 && r > 1) activo = 0;
+                }
+                // Si el patrón es 0, la matriz se llena por completo para máxima dificultad
             }
+            
+            ladrillos[c][r] = { x: 0, y: 0, activo: activo };
         }
+    }
+}
+// --- SISTEMA DE AUDIO DINÁMICO CON ACELERACIÓN ---
+let tiempoMusicaActual = 220; // Tempo normal de la música
+    // --- EVENTOS CONTROLES ---
+    document.addEventListener("keydown", (e) => {
+        if(e.key === "Right" || e.key === "ArrowRight") flechaDerecha = true;
+        if(e.key === "Left" || e.key === "ArrowLeft") flechaIzquierda = true;
+        
+        if(enPartida && !juegoPausado && !pelotaLanzada && e.key === " ") lanzarPelota();
+        if(enPartida && (e.key === "p" || e.key === "P")) alternarPausa();
+    });
+    
+    document.addEventListener("keyup", (e) => {
+        if(e.key === "Right" || e.key === "ArrowRight") flechaDerecha = false;
+        if(e.key === "Left" || e.key === "ArrowLeft") flechaIzquierda = false;
+    });
+    
+    canvas.addEventListener("click", () => { 
+        if(enPartida && !juegoPausado && !pelotaLanzada) lanzarPelota(); 
+    });
 
-        // --- SISTEMA FÍSICO DE DETECCIÓN Y COLISIÓN ---
-        function detectarColisionesJuego() {
-            for (let c = 0; c < columnasLadrillos; c++) {
-                for (let r = 0; r < filasLadrillos; r++) {
-                    let b = ladrillos[c][r];
-                    if (b.activo === 1) {
-                        for (let i = 0; i < pelotas.length; i++) {
-                            let p = pelotas[i];
-                            if (p.x + radioPelota > b.x && p.x - radioPelota < b.x + anchoLadrillo &&
-                                p.y + radioPelota > b.y && p.y - radioPelota < b.y + altoLadrillo) {
-                                
-                                if (!estrellaMarioActiva) {
-                                    p.dy = -p.dy;
-                                }
-                                
-                                b.activo = 0;
-                                puntos += esNivelBonus ? 2 : 1;
-                                document.getElementById("hudPuntos").innerText = puntos;
-                                
-                                sfxLadrillo();
-                                activarVibracion(15);
-                                soltarPoder(b.x, b.y);
-                                verificarEstadoVictoria();
-                                break;
+    function hookClicksConSonido(callback) { sfxClick(); if(callback) callback(); }
+    
+    function lanzarPelota() { 
+        sfxPaleta(); 
+        pelotaLanzada = true; 
+        if(pelotas.length > 0) {
+            let multiplicadorVelocidad = 1 + (nivelActual * 0.05);
+            pelotas[0].dx = 2.5 * multiplicadorVelocidad;
+            pelotas[0].dy = -2.5 * multiplicadorVelocidad;
+        }
+    }
+
+    function resetearPosiciones() {
+        pelotaLanzada = false;
+        anchoPaleta = anchoPaletaBase;
+        velocidadPaleta = velocidadPaletaBase;
+        estrellaMarioActiva = false;
+        estrellaTiempoRestante = 0;
+        poderes = [];
+        
+        paletaX = (canvas.width - anchoPaleta) / 2;
+        
+        // Inicializamos el array con la pelota principal ligada a la paleta
+        let xInicial = paletaX + anchoPaleta / 2;
+        let yInicial = canvas.height - altoPaleta - 25 - radioPelota;
+        
+        pelotas = [{
+            x: xInicial,
+            y: yInicial,
+            dx: 0,
+            dy: 0,
+            estelaHistorial: []
+        }];
+    }
+
+    function actualizarVidasUI() {
+        let corazones = "";
+        for(let i = 0; i < vidas; i++) corazones += "❤️";
+        if(corazones === "") corazones = "💀";
+        document.getElementById("hudVidas").innerText = corazones;
+    }
+
+    function alternarPausa() {
+        if (!enPartida) return;
+        sfxClick();
+        juegoPausado = !juegoPausado;
+        const btn = document.getElementById("btnPausa");
+        if(juegoPausado) {
+            btn.innerText = "Reanudar";
+            btn.classList.add("activo-pausa");
+        } else {
+            btn.innerText = "Pausa";
+            btn.classList.remove("activo-pausa");
+        }
+    }
+
+    function reiniciarNivelActual() {
+        sfxClick();
+        juegoPausado = false;
+        document.getElementById("btnPausa").innerText = "Pausa";
+        document.getElementById("btnPausa").classList.remove("activo-pausa");
+        vidas = 3;
+        actualizarVidasUI();
+        generarNivel(nivelActual);
+        resetearPosiciones();
+        reproducirMusicaDeFondo();
+    }
+
+    function salirAlMenuDesdeJuego() {
+        sfxClick();
+        enPartida = false;
+        juegoPausado = false;
+        detenerMusica();
+        document.getElementById("btnPausa").innerText = "Pausa";
+        document.getElementById("btnPausa").classList.remove("activo-pausa");
+        document.getElementById("hudJuego").classList.add("oculto");
+        document.getElementById("controlesJuego").classList.add("oculto");
+        document.getElementById("menuPrincipal").classList.remove("oculto");
+        actualizarUI();
+    }
+
+    function guardarDatos() {
+        localStorage.setItem("puntos", puntos);
+        localStorage.setItem("recordMaximo", recordMaximo);
+        localStorage.setItem("coins", coins);
+        localStorage.setItem("nivelMaxDesbloqueado", nivelMaximoDesbloqueado);
+        localStorage.setItem("inventario", JSON.stringify(inventario));
+        localStorage.setItem("equipado", JSON.stringify(equipado));
+    }
+
+    function actualizarUI() {
+        // Verificar y actualizar récord máximo
+        if (puntos > recordMaximo) {
+            recordMaximo = puntos;
+        }
+        
+        document.getElementById("mPuntos").innerText = puntos;
+        document.getElementById("mCoins").innerText = coins;
+        document.getElementById("tCoins").innerText = coins;
+        
+        let elRecord = document.getElementById("hudRecord");
+        if(elRecord) elRecord.innerText = recordMaximo;
+
+        document.getElementById("mBtnCanjear").disabled = puntos < 100;
+        guardarDatos();
+        
+        actualizarBotonTienda("skinBase", "verde", 2);
+        actualizarBotonTienda("skinBase", "azulpro", 3);
+        actualizarBotonTienda("skinPelota", "roja", 4);
+        actualizarBotonTienda("efecto", "estela", 6);
+    }
+
+    function actualizarBotonTienda(tipo, id, precio) {
+        const btn = document.getElementById(`btn-${tipo}-${id}`);
+        if (!btn) return;
+        if (equipado[tipo] === id) { btn.innerText = "Equipado"; btn.disabled = true; btn.style.background = "#2ecc71"; }
+        else if (inventario[tipo].includes(id)) { btn.innerText = "Equipar"; btn.disabled = false; btn.style.background = "#0095DD"; }
+        else { btn.innerText = `${precio} C`; btn.disabled = coins < precio; btn.style.background = "#27ae60"; }
+    }
+
+    function construirSelectorNiveles() {
+        const contenedor = document.getElementById("contenedorNiveles");
+        contenedor.innerHTML = "";
+        for (let i = 1; i <= 100; i++) {
+            const btn = document.createElement("button");
+            btn.innerText = i;
+            let claseExtra = i % 10 === 0 ? " bonus-badge" : "";
+
+            if (i <= nivelMaximoDesbloqueado) {
+                btn.className = "btn-nivel" + claseExtra;
+                btn.onclick = () => hookClicksConSonido(() => arrancarNivelEspecifico(i));
+            } else {
+                btn.className = "btn-nivel bloqueado" + claseExtra;
+            }
+            contenedor.appendChild(btn);
+        }
+    }
+
+    function jugarNivelActualDirecto() {
+        hookClicksConSonido(() => {
+            document.getElementById("menuPrincipal").classList.add("oculto");
+            arrancarNivelEspecifico(nivelMaximoDesbloqueado);
+        });
+    }
+
+    function abrirNiveles() { hookClicksConSonido(() => { construirSelectorNiveles(); document.getElementById("menuPrincipal").classList.add("oculto"); document.getElementById("menuNiveles").classList.remove("oculto"); }); }
+    function volverAlMenu() { hookClicksConSonido(() => { document.getElementById("menuNiveles").classList.add("oculto"); document.getElementById("menuTienda").classList.add("oculto"); document.getElementById("menuConfig").classList.add("oculto"); document.getElementById("menuPrincipal").classList.remove("oculto"); actualizarUI(); }); }
+    function abrirTienda() { hookClicksConSonido(() => { document.getElementById("menuPrincipal").classList.add("oculto"); document.getElementById("menuTienda").classList.remove("oculto"); }); }
+    function abrirConfig() { hookClicksConSonido(() => { sincronizarUIConfig(); document.getElementById("menuPrincipal").classList.add("oculto"); document.getElementById("menuConfig").classList.remove("oculto"); }); }
+    function canjearPuntosMenu() { hookClicksConSonido(() => { if (puntos >= 100) { puntos -= 100; coins += 1; actualizarUI(); } }); }
+    
+    function comprarOEquiparMenu(tipo, id, precio) {
+        hookClicksConSonido(() => {
+            if (inventario[tipo].includes(id)) equipado[tipo] = id;
+            else if (coins >= precio) { coins -= precio; inventario[tipo].push(id); equipped[tipo] = id; }
+            actualizarUI();
+        });
+    }
+
+    function arrancarNivelEspecifico(numNivel) {
+        iniciarAudio();
+        nivelActual = numNivel;
+        vidas = 3; 
+        generarNivel(nivelActual);
+        resetearPosiciones();
+        
+        document.getElementById("hudNivel").innerText = nivelActual;
+        document.getElementById("hudBonus").style.display = esNivelBonus ? "inline" : "none";
+        
+        document.getElementById("hudJuego").classList.remove("oculto");
+        document.getElementById("controlesJuego").classList.remove("oculto");
+        document.getElementById("hudPuntos").innerText = puntos;
+        actualizarVidasUI();
+        
+        let elRecord = document.getElementById("hudRecord");
+        if(elRecord) elRecord.innerText = recordMaximo;
+        
+        enPartida = true;
+        juegoPausado = false;
+        reproducirMusicaDeFondo();
+    }
+
+    function procesarVictoria() {
+        enPartida = false;
+        detenerMusica();
+        activarVibracion([60, 40, 60]);
+        playSound(523.25, 'sine', 0.1, 0.15);
+        setTimeout(() => playSound(659.25, 'sine', 0.1, 0.15), 100);
+        setTimeout(() => playSound(783.99, 'sine', 0.3, 0.15), 200);
+
+        document.getElementById("hudJuego").classList.add("oculto");
+        document.getElementById("controlesJuego").classList.add("oculto");
+        
+        if (nivelActual === nivelMaximoDesbloqueado && nivelMaximoDesbloqueado < 100) {
+            nivelMaximoDesbloqueado++;
+        }
+        actualizarUI(); // Guarda y procesa récord máximo si aplica
+
+        document.getElementById("txtSubVictoria").innerText = esNivelBonus ? "¡Nivel de Bonificación superado con Doble Puntaje!" : "Nivel completado con éxito.";
+        document.getElementById("btnSiguienteNivel").style.display = (nivelActual >= 100) ? "none" : "inline-block";
+        document.getElementById("menuVictoria").classList.remove("oculto");
+    }
+
+    function cargarSiguienteNivel() { hookClicksConSonido(() => { document.getElementById("menuVictoria").classList.add("oculto"); arrancarNivelEspecifico(nivelActual + 1); }); }
+    function irAMercadoDesdeVictoria() { hookClicksConSonido(() => { document.getElementById("menuVictoria").classList.add("oculto"); abrirTienda(); }); }
+    function volverAlMenuDesdeVictoria() { hookClicksConSonido(() => { document.getElementById("menuVictoria").classList.add("oculto"); document.getElementById("menuPrincipal").classList.remove("oculto"); actualizarUI(); }); }
+
+    function finalizarPorMuerte() {
+        enPartida = false;
+        detenerMusica();
+        sfxGameOver();
+        activarVibracion(250); 
+        
+        document.getElementById("hudJuego").classList.add("oculto");
+        document.getElementById("controlesJuego").classList.add("oculto");
+        
+        document.getElementById("txtNivelDerrota").innerText = nivelActual;
+        document.getElementById("menuDerrota").classList.remove("oculto");
+        actualizarUI();
+    }
+
+    function reintentarNivelDerrota() {
+        hookClicksConSonido(() => {
+            document.getElementById("menuDerrota").classList.add("oculto");
+            arrancarNivelEspecifico(nivelActual); // Arranca desde el principio del nivel actual, no del 1
+        });
+    }
+
+    function volverAlMenuDesdeDerrota() {
+        hookClicksConSonido(() => {
+            document.getElementById("menuDerrota").classList.add("oculto");
+            document.getElementById("menuPrincipal").classList.remove("oculto");
+            actualizarUI();
+        });
+    }
+
+    // --- SISTEMA DE POWER-UPS ---
+    function soltarPoder(bloqueX, bloqueY) {
+        // 20% de probabilidad de tirar un ítem aleatorio al romper un bloque
+        if (Math.random() > 0.20) return; 
+        
+        let powerAleatorio = TIPOS_PODER[Math.floor(Math.random() * TIPOS_PODER.length)];
+        poderes.push({
+            x: bloqueX + anchoLadrillo / 2,
+            y: bloqueY + altoLadrillo,
+            dy: 2, // Velocidad de caída de la cápsula
+            info: powerAleatorio
+        });
+    }
+
+    function aplicarPoder(item) {
+        if(item.bueno) sfxPowerUp(); else sfxPowerDown();
+        activarVibracion(40);
+
+        switch(item.tipo) {
+            case "ALARGAR":
+                anchoPaleta = anchoPaletaBase * 1.4;
+                break;
+            case "ACHICAR":
+                anchoPaleta = anchoPaletaBase * 0.65;
+                break;
+            case "PALETA_RAPIDA":
+                velocidadPaleta = velocidadPaletaBase * 1.5;
+                break;
+            case "PALETA_LENTA":
+                velocidadPaleta = velocidadPaletaBase * 0.6;
+                break;
+            case "PELOTA_RAPIDA":
+                pelotas.forEach(p => { p.dx *= 1.3; p.dy *= 1.3; });
+                break;
+            case "PELOTA_LENTA":
+                pelotas.forEach(p => { p.dx *= 0.75; p.dy *= 0.75; });
+                break;
+            case "ESTRELLA":
+                estrellaMarioActiva = true;
+                estrellaTiempoRestante = 400; // Duración en frames (~7-8 segundos)
+                break;
+            case "MULTIPLICAR":
+                // Duplicamos las pelotas activas clonándolas con direcciones dispersas
+                let nuevasPelotas = [];
+                pelotas.forEach(p => {
+                    // Pelota izquierda extra
+                    nuevasPelotas.push({
+                        x: p.x, y: p.y,
+                        dx: p.dx - 1.5, dy: -Math.abs(p.dy),
+                        estelaHistorial: []
+                    });
+                    // Pelota derecha extra
+                    nuevasPelotas.push({
+                        x: p.x, y: p.y,
+                        dx: p.dx + 1.5, dy: -Math.abs(p.dy),
+                        estelaHistorial: []
+                    });
+                });
+                pelotas = pelotas.concat(nuevasPelotas);
+                break;
+        }
+    }
+
+    // --- COLISIONES ---
+    function detectarColision() {
+        for(let c = 0; c < columnasLadrillos; c++) {
+            for(let r = 0; r < filasLadrillos; r++) {
+                let l = ladrillos[c][r];
+                if(l.activo === 1) {
+                    // Iteramos sobre todas las pelotas para verificar colisión con el bloque
+                    for(let i = 0; i < pelotas.length; i++) {
+                        let p = pelotas[i];
+                        if(p.x > l.x && p.x < l.x + anchoLadrillo && p.y > l.y && p.y < l.y + altoLadrillo) {
+                            
+                            // Si la estrella de Mario está activa, no rebota, pasa de largo rompiendo el bloque
+                            if (!estrellaMarioActiva) {
+                                p.dy = -p.dy;
                             }
+                            
+                            l.activo = 0;
+                            puntos += esNivelBonus ? 2 : 1;
+                            document.getElementById("hudPuntos").innerText = puntos;
+                            
+                            sfxLadrillo();
+                            activarVibracion(15); 
+                            soltarPoder(l.x, l.y); // Intenta soltar un poder en esa posición
+                            verificarVictoria();
+                            break; // Rompe el lazo de pelotas para este bloque en este cuadro
                         }
                     }
                 }
             }
         }
+    }
 
-        function verificarEstadoVictoria() {
-            let bloquesRestantes = false;
-            for (let c = 0; c < columnasLadrillos; c++) {
-                for (let r = 0; r < filasLadrillos; r++) {
-                    if (ladrillos[c][r].activo === 1) bloquesRestantes = true;
-                }
-            }
-            if (!bloquesRestantes) {
-                enPartida = false;
-                detenerMusica();
-                
-                // Mostrar overlay de victoria
-                if (nivelActual === nivelMaximoDesbloqueado && nivelMaximoDesbloqueado < 100) {
-                    nivelMaximoDesbloqueado++;
-                }
-                actualizarUI();
-
-                document.getElementById("txtSubVictoria").innerText = esNivelBonus ? "¡Nivel de Bonificación superado con Doble Puntaje!" : "Nivel completado con éxito.";
-                document.getElementById("btnSiguienteNivel").style.display = (nivelActual >= 100) ? "none" : "inline-block";
-                document.getElementById("modalVictoria").classList.remove("oculto");
+    function verificarVictoria() {
+        let quedanLadrillos = false;
+        for(let c = 0; c < columnasLadrillos; c++) {
+            for(let r = 0; r < filasLadrillos; r++) {
+                if(ladrillos[c][r].activo === 1) quedanLadrillos = true;
             }
         }
+        if(!quedanLadrillos) procesarVictoria();
+    }
 
-        // --- BOTONES INTERNOS DE MODAL ARCADE ---
-        function cargarSiguienteNivel() {
-            document.getElementById("modalVictoria").classList.add("oculto");
-            arrancarNivelEspecifico(nivelActual + 1);
+    // --- RENDERING Y BUCLE DE JUEGO ---
+    function dibujarPelota(p) {
+        if (equipado.efecto === "estela" && pelotaLanzada && !juegoPausado) {
+            p.estelaHistorial.push({ x: p.x, y: p.y });
+            if (p.estelaHistorial.length > 10) p.estelaHistorial.shift();
+            for (let i = 0; i < p.estelaHistorial.length; i++) {
+                ctx.beginPath();
+                ctx.arc(p.estelaHistorial[i].x, p.estelaHistorial[i].y, radioPelota * (i/p.estelaHistorial.length), 0, Math.PI*2);
+                ctx.fillStyle = estrellaMarioActiva ? `hsla(${colorEstrellaFlisFlas + (i*20)}, 100%, 50%, 0.3)` : `rgba(0, 230, 255, ${i / p.estelaHistorial.length * 0.25})`;
+                ctx.fill();
+                ctx.closePath();
+            }
+        } else { p.estelaHistorial = []; }
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, radioPelota, 0, Math.PI*2);
+        
+        if (estrellaMarioActiva) {
+            ctx.fillStyle = `hsl(${colorEstrellaFlisFlas}, 100%, 60%)`;
+        } else {
+            ctx.fillStyle = (equipado.skinPelota === "roja") ? "#ff4444" : "#ffcc00";
         }
+        
+        ctx.fill();
+        ctx.closePath();
+    }
 
-        function irAMercadoDesdeVictoria() {
-            document.getElementById("modalVictoria").classList.add("oculto");
-            document.getElementById("contenedorJuego").classList.add("oculto");
-            document.getElementById("juegoCanvas").classList.add("oculto");
-            abrirTienda();
-        }
+    function dibujarPaleta() {
+        ctx.beginPath();
+        ctx.rect(paletaX, canvas.height - altoPaleta - 25, anchoPaleta, altoPaleta);
+        if (estrellaMarioActiva) {
+            ctx.fillStyle = `hsl(${(colorEstrellaFlisFlas + 180) % 360}, 100%, 50%)`;
+        } else if(equipado.skinBase === "verde") ctx.fillStyle = "#2ecc71";
+        else if(equipado.skinBase === "azulpro") ctx.fillStyle = "#3498db";
+        else ctx.fillStyle = "#ffffff";
+        ctx.fill();
+        ctx.closePath();
+    }
 
-        function volverAlMenuDesdeVictoria() {
-            document.getElementById("modalVictoria").classList.add("oculto");
-            document.getElementById("contenedorJuego").classList.add("oculto");
-            document.getElementById("juegoCanvas").classList.add("oculto");
-            document.getElementById("menuPrincipal").classList.remove("oculto");
-            actualizarUI();
-        }
-
-        function reintentarNivelDerrota() {
-            document.getElementById("modalDerrota").classList.add("oculto");
-            arrancarNivelEspecifico(nivelActual);
-        }
-
-        function volverAlMenuDesdeDerrota() {
-            document.getElementById("modalDerrota").classList.add("oculto");
-            document.getElementById("contenedorJuego").classList.add("oculto");
-            document.getElementById("juegoCanvas").classList.add("oculto");
-            document.getElementById("menuPrincipal").classList.remove("oculto");
-            actualizarUI();
-        }
-
-        // --- DIBUJADOS CON BRILLO NEÓN ---
-        function drawNeonRect(x, y, w, h, color, glowRadius = 15) {
-            ctx.shadowBlur = glowRadius;
-            ctx.shadowColor = color;
-            ctx.fillStyle = color;
-            ctx.fillRect(x, y, w, h);
-            ctx.shadowBlur = 0;
-        }
-
-        function drawNeonCircle(x, y, r, color, glowRadius = 15) {
-            ctx.shadowBlur = glowRadius;
-            ctx.shadowColor = color;
-            ctx.fillStyle = color;
-            ctx.beginPath();
-            ctx.arc(x, y, r, 0, Math.PI * 2, false);
-            ctx.closePath();
-            ctx.fill();
-            ctx.shadowBlur = 0;
-        }
-
-        function dibujarPelotasYEstelas(p) {
-            // Estela especial de Fuego o Estela de Neón normal
-            let usarFuego = (equipado.efecto === "fuego");
-            let usarEstela = (equipado.efecto === "estela") || usarFuego;
-
-            if (usarEstela && pelotaLanzada && !juegoPausado) {
-                p.estelaHistorial.push({ x: p.x, y: p.y });
-                if (p.estelaHistorial.length > 10) p.estelaHistorial.shift();
-                for (let i = 0; i < p.estelaHistorial.length; i++) {
+    function dibujarLadrillos() {
+        for(let c = 0; c < columnasLadrillos; c++) {
+            for(let r = 0; r < filasLadrillos; r++) {
+                if(ladrillos[c][r].activo === 1) {
+                    let ladrilloX = (c * (anchoLadrillo + paddingLadrillo)) + margenIzquierdoLadrillo;
+                    let ladrilloY = (r * (altoLadrillo + paddingLadrillo)) + margenSuperiorLadrillo;
+                    ladrillos[c][r].x = ladrilloX;
+                    ladrillos[c][r].y = ladrilloY;
                     ctx.beginPath();
-                    ctx.arc(p.estelaHistorial[i].x, p.estelaHistorial[i].y, radioPelota * (i / p.estelaHistorial.length), 0, Math.PI * 2);
+                    ctx.rect(ladrilloX, ladrilloY, anchoLadrillo, altoLadrillo);
                     
-                    if (estrellaMarioActiva) {
-                        ctx.fillStyle = `hsla(${colorEstrellaFlisFlas + (i * 25)}, 100%, 50%, 0.25)`;
-                    } else if (usarFuego) {
-                        // Sutil rampa de color fuego cálido: de amarillo a rojo intenso
-                        ctx.fillStyle = `rgba(255, ${Math.floor(i * 18)}, 0, ${i / p.estelaHistorial.length * 0.4})`;
-                    } else {
-                        ctx.fillStyle = `rgba(0, 240, 255, ${i / p.estelaHistorial.length * 0.2})`;
-                    }
+                    if(esNivelBonus) ctx.fillStyle = "#ffcc00";
+                    else if(r === 0) ctx.fillStyle = "#e74c3c";
+                    else if(r === 1) ctx.fillStyle = "#e67e22";
+                    else if(r === 2) ctx.fillStyle = "#f1c40f";
+                    else ctx.fillStyle = "#2ecc71";
                     
                     ctx.fill();
                     ctx.closePath();
                 }
-            } else { p.estelaHistorial = []; }
-
-            let colorPelota = NEON_GREEN;
-            if (estrellaMarioActiva) {
-                colorPelota = `hsl(${colorEstrellaFlisFlas}, 100%, 60%)`;
-            } else if (equipado.skinPelota === "roja") {
-                colorPelota = "#ff3333";
-            } else if (equipado.skinPelota === "baseball") {
-                // Aspecto pelota de béisbol (Blanco con costuras rojas implícitas)
-                colorPelota = "#ffffff";
-            }
-
-            drawNeonCircle(p.x, p.y, radioPelota, colorPelota, estrellaMarioActiva ? 22 : 12);
-            
-            // Dibujar detalles de costuras si es diseño de béisbol
-            if (equipado.skinPelota === "baseball") {
-                ctx.strokeStyle = "#ff0077";
-                ctx.lineWidth = 1;
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, radioPelota - 2, 0.5, Math.PI - 0.5);
-                ctx.stroke();
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, radioPelota - 2, Math.PI + 0.5, -0.5);
-                ctx.stroke();
             }
         }
+    }
 
-        function dibujarPaleta() {
-            let colorPal = "#ffffff";
-            if (estrellaMarioActiva) {
-                colorPal = `hsl(${(colorEstrellaFlisFlas + 180) % 360}, 100%, 50%)`;
-            } else if (equipado.skinBase === "verde") {
-                colorPal = NEON_GREEN;
-            } else if (equipado.skinBase === "azulpro") {
-                colorPal = NEON_CYAN;
-            } else if (equipado.skinBase === "baseball") {
-                // Color marrón madera clásico del bate de béisbol
-                colorPal = "#d2b48c";
+    function dibujarYActualizarPoderes() {
+        for(let i = poderes.length - 1; i >= 0; i--) {
+            let pod = poderes[i];
+            if (!juegoPausado) pod.y += pod.dy;
+
+            // Dibujar cápsula
+            ctx.beginPath();
+            ctx.arc(pod.x, pod.y, 11, 0, Math.PI * 2);
+            if(pod.info.color === "rainbow") {
+                ctx.fillStyle = `hsl(${colorEstrellaFlisFlas}, 100%, 50%)`;
+            } else {
+                ctx.fillStyle = pod.info.color;
             }
-            
-            drawNeonRect(paletaX, canvas.height - altoPaleta - 25, anchoPaleta, altoPaleta, colorPal, 15);
+            ctx.fill();
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = "#ffffff";
+            ctx.stroke();
+            ctx.closePath();
+
+            // Dibujar símbolo del poder
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "bold 11px sans-serif";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(pod.info.letra, pod.x, pod.y);
+
+            // Colisión de la cápsula con la paleta
+            let yPaleta = canvas.height - altoPaleta - 25;
+            if(pod.y + 11 >= yPaleta && pod.y - 11 <= yPaleta + altoPaleta && pod.x >= paletaX && pod.x <= paletaX + anchoPaleta) {
+                aplicarPoder(pod.info);
+                poderes.splice(i, 1);
+                continue;
+            }
+
+            // Eliminar si cae al vacío
+            if(pod.y - 11 > canvas.height) {
+                poderes.splice(i, 1);
+            }
+        }
+    }
+
+    function actualizarJuego() {
+        if (!enPartida || juegoPausado) {
+            requestAnimationFrame(actualizarJuego);
+            return;
         }
 
-        function dibujarLadrillosNeon() {
-            for (let c = 0; c < columnasLadrillos; c++) {
-                for (let r = 0; r < filasLadrillos; r++) {
-                    if (ladrillos[c][r].activo === 1) {
-                        let ladX = (c * (anchoLadrillo + paddingLadrillo)) + margenIzquierdoLadrillo;
-                        let ladY = (r * (altoLadrillo + paddingLadrillo)) + margenSuperiorLadrillo;
-                        ladrillos[c][r].x = ladX;
-                        ladrillos[c][r].y = ladY;
+        // Ciclo de color para efectos tipo arcoíris (Mario Star)
+        colorEstrellaFlisFlas = (colorEstrellaFlisFlas + 6) % 360;
+        if(estrellaMarioActiva) {
+            estrellaTiempoRestante--;
+            if(estrellaTiempoRestante <= 0) estrellaMarioActiva = false;
+        }
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        dibujarLadrillos();
+        dibujarPaleta();
+        dibujarYActualizarPoderes();
+        detectarColision();
+
+        // Procesar movimientos y rebotes de cada pelota activa
+        for(let i = pelotas.length - 1; i >= 0; i--) {
+            let p = pelotas[i];
+            dibujarPelota(p);
+
+            if (pelotaLanzada) {
+                p.x += p.dx;
+                p.y += p.dy;
+
+                // Rebotes laterales
+                if(p.x + p.dx > canvas.width - radioPelota || p.x + p.dx < radioPelota) {
+                    p.dx = -p.dx;
+                    sfxPared();
+                }
+                // Rebote techo
+                if(p.y + p.dy < radioPelota) {
+                    p.dy = -p.dy;
+                    sfxPared();
+                }
+                // Zona baja de la paleta
+                else if(p.y + p.dy > canvas.height - altoPaleta - 25 - radioPelota) {
+                    if(p.x > paletaX && p.x < paletaX + anchoPaleta) {
+                        let puntoImpacto = p.x - (paletaX + anchoPaleta / 2);
+                        puntoImpacto = puntoImpacto / (anchoPaleta / 2);
+                        let anguloMaximo = Math.PI / 3; 
+                        let anguloRebote = puntoImpacto * anguloMaximo;
                         
-                        let colorBloque = NEON_CYAN;
-                        if (esNivelBonus) colorBloque = "#ffcc00";
-                        else if (r === 0) colorBloque = NEON_PINK;
-                        else if (r === 1) colorBloque = "#e67e22";
-                        else if (r === 2) colorBloque = "#f1c40f";
-
-                        drawNeonRect(ladX, ladY, anchoLadrillo, altoLadrillo, colorBloque, 8);
+                        let velocidadActual = Math.sqrt(p.dx*p.dx + p.dy*p.dy);
+                        p.dx = velocidadActual * Math.sin(anguloRebote);
+                        p.dy = -velocidadActual * Math.cos(anguloRebote);
+                        
+                        sfxPaleta();
+                        activarVibracion(20);
+                    }
+                    // Cae al vacío
+                    else if(p.y + p.dy > canvas.height - radioPelota) {
+                        pelotas.splice(i, 1); // Borramos esta pelota específica de la cancha
+                        continue;
                     }
                 }
+            } else {
+                // Si la pelota principal no fue lanzada, sigue el eje del centro de la paleta
+                p.x = paletaX + anchoPaleta / 2;
             }
         }
 
-        function gestionarYDibujarPoderes() {
-            for (let i = poderes.length - 1; i >= 0; i--) {
-                let pod = poderes[i];
-                if (!juegoPausado) pod.y += pod.dy;
-
-                let colCapsula = pod.info.color === "rainbow" ? `hsl(${colorEstrellaFlisFlas}, 100%, 50%)` : pod.info.color;
-                drawNeonCircle(pod.x, pod.y, 11, colCapsula, 10);
-
-                ctx.fillStyle = "#ffffff";
-                ctx.font = "bold 11px 'Courier New', monospace";
-                ctx.textAlign = "center";
-                ctx.textBaseline = "middle";
-                ctx.fillText(pod.info.letra, pod.x, pod.y);
-
-                let yPaleta = canvas.height - altoPaleta - 25;
-                if (pod.y + 11 >= yPaleta && pod.y - 11 <= yPaleta + altoPaleta && pod.x >= paletaX && pod.x <= paletaX + anchoPaleta) {
-                    aplicarPoder(pod.info);
-                    poderes.splice(i, 1);
-                    continue;
-                }
-                if (pod.y - 11 > canvas.height) poderes.splice(i, 1);
+        // Verificar estado de las pelotas en juego
+        if (pelotas.length === 0) {
+            vidas--;
+            actualizarVidasUI();
+            if (vidas > 0) {
+                resetearPosiciones(); // Te da otra pelota en la paleta sin resetear el bloqueado del nivel
+            } else {
+                finalizarPorMuerte(); // Cero vidas: Game Over (reinicia el nivel actual)
             }
         }
 
-        // --- CONTROL BUCLE DINÁMICO ---
-        function actualizarFisicasYRender() {
-            if (!enPartida) {
-                requestAnimationFrame(actualizarFisicasYRender);
-                return;
-            }
-
-            if (juegoPausado) {
-                ctx.fillStyle = "rgba(13, 13, 19, 0.4)";
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                ctx.fillStyle = NEON_PINK;
-                ctx.font = "bold 32px 'Courier New', monospace";
-                ctx.textAlign = "center";
-                ctx.shadowColor = NEON_PINK;
-                ctx.shadowBlur = 15;
-                ctx.fillText("MODO PAUSA", canvas.width / 2, canvas.height / 2 + 10);
-                ctx.shadowBlur = 0;
-                
-                requestAnimationFrame(actualizarFisicasYRender);
-                return;
-            }
-
-            colorEstrellaFlisFlas = (colorEstrellaFlisFlas + 6) % 360;
-            if (estrellaMarioActiva) {
-                estrellaTiempoRestante--;
-                if (estrellaTiempoRestante <= 0) estrellaMarioActiva = false;
-            }
-
-            // --- ESCALA DE GRISES DINÁMICA DE FONDO POR NIVEL ---
-            // Oscila sutilmente entre negro profundo y gris oscuro para no saturar la vista
-            let tonalidadGris = Math.floor((nivelActual % 10) * 2.5); // Sutil factor de variación
-            ctx.fillStyle = `rgb(${tonalidadGris}, ${tonalidadGris}, ${tonalidadGris + 3})`;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            dibujarLadrillosNeon();
-            gestionarYDibujarPoderes();
-            detectarColisionesJuego();
-            dibujarPaleta();
-
-            // Mover y rebotar pelotas
-            for (let i = pelotas.length - 1; i >= 0; i--) {
-                let p = pelotas[i];
-                dibujarPelotasYEstelas(p);
-
-                if (pelotaLanzada) {
-                    p.x += p.dx;
-                    p.y += p.dy;
-
-                    if (p.x + p.dx > canvas.width - radioPelota || p.x + p.dx < radioPelota) { p.dx = -p.dx; sfxPared(); }
-                    if (p.y + p.dy < radioPelota) { p.dy = -p.dy; sfxPared(); }
-                    
-                    else if (p.y + p.dy > canvas.height - altoPaleta - 25 - radioPelota) {
-                        if (p.x > paletaX && p.x < paletaX + anchoPaleta) {
-                            let impacto = (p.x - (paletaX + anchoPaleta / 2)) / (anchoPaleta / 2);
-                            let velocidadActual = Math.sqrt(p.dx * p.dx + p.dy * p.dy);
-                            
-                            p.dx = velocidadActual * Math.sin(impacto * (Math.PI / 3));
-                            p.dy = -velocidadActual * Math.cos(impacto * (Math.PI / 3));
-                            sfxPaleta();
-                            activarVibracion(20);
-                        }
-                        else if (p.y + p.dy > canvas.height - radioPelota) {
-                            pelotas.splice(i, 1);
-                            continue;
-                        }
-                    }
-                } else {
-                    p.x = paletaX + anchoPaleta / 2;
-                }
-            }
-
-            // Gestión de vidas
-            if (pelotas.length === 0) {
-                vidas--;
-                actualizarVidasUI();
-                if (vidas > 0) {
-                    resetearPosiciones();
-                } else {
-                    enPartida = false;
-                    detenerMusica();
-                    sfxGameOver();
-                    activarVibracion(250);
-                    
-                    document.getElementById("txtNivelDerrota").innerText = `Nivel ${nivelActual} fallido`;
-                    document.getElementById("modalDerrota").classList.remove("oculto");
-                }
-            }
-
-            // Movimiento paleta
-            if (flechaDerecha && paletaX < canvas.width - anchoPaleta) paletaX += velocidadPaleta;
-            else if (flechaIzquierda && paletaX > 0) paletaX -= velocidadPaleta;
-
-            requestAnimationFrame(actualizarFisicasYRender);
+        // Movimiento controlado de la paleta
+        if(flechaDerecha && paletaX < canvas.width - anchoPaleta) {
+            paletaX += velocidadPaleta;
+        } else if(flechaIzquierda && paletaX > 0) {
+            paletaX -= velocidadPaleta;
         }
 
-        // --- DISPARADOR DE INICIO ---
-        actualizarUI();
-        actualizarFisicasYRender();
-    </script>
+        requestAnimationFrame(actualizarJuego);
+    }
+
+    // Inicializar interfaz y lanzar el bucle principal
+    actualizarUI();
+    actualizarJuego();
+</script>
+
 </body>
 </html>
